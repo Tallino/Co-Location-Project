@@ -1,15 +1,18 @@
+using System;
 using UnityEngine;
 using Photon.Pun;
+using Random = UnityEngine.Random;
+
 
 public class NetworkPlayerSpawner : MonoBehaviourPunCallbacks
 {
 
     private GameObject spawnedPlayerPrefab;
-    
+
     public override void OnJoinedRoom()
     {
         base.OnJoinedRoom();
-        spawnedPlayerPrefab = PhotonNetwork.Instantiate("Network Player", transform.position, transform.rotation);
+        spawnedPlayerPrefab = PhotonNetwork.Instantiate("Network Player", transform.position,transform.rotation);
     }
 
     public override void OnLeftRoom()
