@@ -6,11 +6,11 @@ using UnityEngine;
 
 public class CoLocationSynchronizer : MonoBehaviour
 {
-  public Transform RightHandPosition;
-  public Transform LeftHandPosition;
+  public NetworkPlayerSpawner networkPlayerSpawner;
+ 
   public void Synchronize()
   {
-    
+    Debug.Log(networkPlayerSpawner.GetSpawnedPlayerPrefab().transform.position);
   }
-
+  
 }

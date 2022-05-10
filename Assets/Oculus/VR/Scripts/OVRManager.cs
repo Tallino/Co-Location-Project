@@ -1541,7 +1541,7 @@ public class OVRManager : MonoBehaviour, OVRMixedRealityCaptureConfiguration
 		if (instance != null)
 		{
 			enabled = false;
-			//DestroyImmediate(this);
+			DestroyImmediate(this);
 			return;
 		}
 
