@@ -162,5 +162,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23c41c6c0cdf52e4081a6d923ad38184, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RightHandPosition: {fileID: 0}
-  LeftHandPosition: {fileID: 0}
+  networkPlayerSpawner: {fileID: 0}
