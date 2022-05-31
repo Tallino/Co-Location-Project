@@ -1537,14 +1537,14 @@ public class OVRManager : MonoBehaviour, OVRMixedRealityCaptureConfiguration
 	public static bool OVRManagerinitialized = false;
 	private void InitOVRManager()
 	{
-		/*
+		
 		// Only allow one instance at runtime.
 		if (instance != null)
 		{
 			enabled = false;
 			DestroyImmediate(this);
 			return;
-		}*/
+		}
 
 		instance = this;
 

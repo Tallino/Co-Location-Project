@@ -10,7 +10,7 @@ public class CoLocationSynchronizer : MonoBehaviour
  
   public void Synchronize()
   {
-    Debug.Log(networkPlayerSpawner.GetSpawnedPlayerPrefab().transform.position);
+    Debug.Log("AAAAA");
   }
   
 }

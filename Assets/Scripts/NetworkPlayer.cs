@@ -34,8 +34,8 @@ public class NetworkPlayer : MonoBehaviour
         if (photonView.IsMine)
         {
             MapPosition(head, XRNode.Head);
-            MapPosition(leftHand, XRNode.LeftHand);
-            MapPosition(rightHand, XRNode.RightHand);
+           // MapPosition(leftHand, XRNode.LeftHand);
+           // MapPosition(rightHand, XRNode.RightHand);
         }
         
     }
