@@ -194,6 +194,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f39a9d103c4129b42a53567f6cd8356a, type: 3}
+--- !u!114 &167119244 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2644266181112463229, guid: f39a9d103c4129b42a53567f6cd8356a,
+    type: 3}
+  m_PrefabInstance: {fileID: 167119243}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a379f34d4f4f2e408d34f14bfb753ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &206444878 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5783122652783104060, guid: 7e3fe9c8bb3e30e4c9cadb4a26994a93,
@@ -206,6 +218,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 941ddb27a4be5184591e721b2a7814a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &239873765 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7192818547691322728, guid: f39a9d103c4129b42a53567f6cd8356a,
+    type: 3}
+  m_PrefabInstance: {fileID: 167119243}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &239873766 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7192818547691413832, guid: f39a9d103c4129b42a53567f6cd8356a,
+    type: 3}
+  m_PrefabInstance: {fileID: 167119243}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &239873769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 239873765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
 --- !u!1001 &323411828
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -221,17 +278,17 @@ PrefabInstance:
     - target: {fileID: 344757555150067885, guid: eb4d79be6df694142833568bec0bed4c,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.24818431
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 344757555150067885, guid: eb4d79be6df694142833568bec0bed4c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.4518809
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 344757555150067885, guid: eb4d79be6df694142833568bec0bed4c,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.21839057
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 344757555150067885, guid: eb4d79be6df694142833568bec0bed4c,
         type: 3}
@@ -276,20 +333,74 @@ PrefabInstance:
     - target: {fileID: 344757555150067886, guid: eb4d79be6df694142833568bec0bed4c,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 344757555150067890, guid: eb4d79be6df694142833568bec0bed4c,
         type: 3}
       propertyPath: _hand
       value: 
-      objectReference: {fileID: 1653344970}
+      objectReference: {fileID: 167119244}
+    - target: {fileID: 344757555150067891, guid: eb4d79be6df694142833568bec0bed4c,
+        type: 3}
+      propertyPath: _hand
+      value: 
+      objectReference: {fileID: 167119244}
+    - target: {fileID: 344757555150067894, guid: eb4d79be6df694142833568bec0bed4c,
+        type: 3}
+      propertyPath: position
+      value: 
+      objectReference: {fileID: 239873766}
     - target: {fileID: 344757555150067894, guid: eb4d79be6df694142833568bec0bed4c,
         type: 3}
       propertyPath: networkPlayerSpawner
       value: 
       objectReference: {fileID: 206444878}
+    - target: {fileID: 344757555150067895, guid: eb4d79be6df694142833568bec0bed4c,
+        type: 3}
+      propertyPath: _hand
+      value: 
+      objectReference: {fileID: 167119244}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb4d79be6df694142833568bec0bed4c, type: 3}
+--- !u!1 &743062296 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7192818547691322730, guid: f39a9d103c4129b42a53567f6cd8356a,
+    type: 3}
+  m_PrefabInstance: {fileID: 167119243}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &743062299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 743062296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
 --- !u!1 &892290114
 GameObject:
   m_ObjectHideFlags: 0
@@ -405,18 +516,6 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
---- !u!114 &1653344970 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 344757555150067890, guid: eb4d79be6df694142833568bec0bed4c,
-    type: 3}
-  m_PrefabInstance: {fileID: 323411828}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b14164f8f23faae4293baeb84485b3d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2069344346
 GameObject:
   m_ObjectHideFlags: 0

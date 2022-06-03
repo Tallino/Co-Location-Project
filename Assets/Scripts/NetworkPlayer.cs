@@ -1,28 +1,29 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.XR;
+using UnityEngine.InputSystem;
 using Photon.Pun;
+using UnityEngine.XR;
+using CommonUsages = UnityEngine.XR.CommonUsages;
 
 public class NetworkPlayer : MonoBehaviour
 {
 
     public Transform head;
-
-    public Transform leftHand;
-
-    public Transform rightHand;
-
+    // public InputActionReference sendDataReference;
+    
     private PhotonView photonView;
     
     // Start is called before the first frame update
     void Start()
     {
         photonView = GetComponent<PhotonView>();
-
+        // sendDataReference.action.started += SendData;
+        
         if (!photonView.IsMine)
         {
-            gameObject.transform.Translate(2, 0, 2);
+            gameObject.transform.Translate(5, 0, 5);
             gameObject.transform.Rotate(0,180,0);
         }
 
@@ -39,6 +40,12 @@ public class NetworkPlayer : MonoBehaviour
         }
         
     }
+
+    void SendData(InputAction.CallbackContext context)
+    {
+        Debug.Log("ammerdaaaaaaaaaaaa");
+    }
+    
 
     void MapPosition(Transform target, XRNode node)
     {

@@ -1073,6 +1073,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Synchronize",
+            "id": "22e92575-de62-471a-8d7c-8b26f0a937de",
+            "actions": [
+                {
+                    "name": "SendData",
+                    "type": "Button",
+                    "id": "7cbaae76-1813-4b1d-8dfb-97e702a7e810",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "a929aaed-a16a-4175-b734-a03bcea57fa2",
+                    "path": "<OpenVROculusTouchController>{LeftHand}/primaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SendData",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [
