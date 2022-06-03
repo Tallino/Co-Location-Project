@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using ExitGames.Client.Photon;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine.XR;
 using CommonUsages = UnityEngine.XR.CommonUsages;
 
@@ -13,7 +15,10 @@ public class NetworkPlayer : MonoBehaviour, XRIDefaultInputActions.ISynchronizeA
     public Transform head;
     XRIDefaultInputActions _defaultInputActions;
     
+    private const byte SendIDForSync = 1;
     private PhotonView photonView;
+    private int idOfPlayerToBePositioned;
+    
     
     // Start is called before the first frame update
     void Start()
@@ -30,7 +35,7 @@ public class NetworkPlayer : MonoBehaviour, XRIDefaultInputActions.ISynchronizeA
         }
 
     }
-
+    
     // Update is called once per frame
     void Update()
     {
@@ -42,6 +47,25 @@ public class NetworkPlayer : MonoBehaviour, XRIDefaultInputActions.ISynchronizeA
         }
         
     }
+    
+    private void OnEnable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
+    }
+
+    private void OnDisable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
+    }
+
+    private void OnEvent(EventData photonEvent)
+    {
+        if (photonEvent.Code == SendIDForSync)
+        {
+            idOfPlayerToBePositioned = (int)photonEvent.CustomData;
+            Debug.Log("Player to be positioned is " + idOfPlayerToBePositioned);
+        }
+    }
 
     void MapPosition(Transform target, XRNode node)
     {
@@ -51,9 +75,11 @@ public class NetworkPlayer : MonoBehaviour, XRIDefaultInputActions.ISynchronizeA
         target.position = position;
         target.rotation = rotation;
     }
-
+    
     public void OnSendData(InputAction.CallbackContext context)
     {
-        Debug.Log("ammerdaaaaaaaaaaaa");
+        Debug.Log("My View Id is " + photonView.ViewID);
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
+        PhotonNetwork.RaiseEvent(SendIDForSync, photonView.ViewID,raiseEventOptions,SendOptions.SendReliable);
     }
 }
