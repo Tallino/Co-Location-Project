@@ -4,6 +4,9 @@ using Photon.Realtime;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
+    
+    private GameObject _spawnedPlayerPrefab;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -29,12 +32,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         
         PhotonNetwork.JoinOrCreateRoom("Room 1", roomOptions, TypedLobby.Default);
     }
-
-
+    
     public override void OnJoinedRoom()
     {
         Debug.Log("I am connected to the room");
         base.OnJoinedRoom();
+        _spawnedPlayerPrefab = PhotonNetwork.Instantiate("Network Player", transform.position, transform.rotation);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -43,5 +46,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         base.OnPlayerEnteredRoom(newPlayer);
     }
     
+    public override void OnLeftRoom()
+    {
+        base.OnLeftRoom();
+        PhotonNetwork.Destroy(_spawnedPlayerPrefab);
+    }
     
 }
