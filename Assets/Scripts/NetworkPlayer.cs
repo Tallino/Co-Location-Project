@@ -7,11 +7,11 @@ using Photon.Pun;
 using UnityEngine.XR;
 using CommonUsages = UnityEngine.XR.CommonUsages;
 
-public class NetworkPlayer : MonoBehaviour
+public class NetworkPlayer : MonoBehaviour, XRIDefaultInputActions.ISynchronizeActions
 {
 
     public Transform head;
-    // public InputActionReference sendDataReference;
+    XRIDefaultInputActions _defaultInputActions;
     
     private PhotonView photonView;
     
@@ -19,7 +19,9 @@ public class NetworkPlayer : MonoBehaviour
     void Start()
     {
         photonView = GetComponent<PhotonView>();
-        // sendDataReference.action.started += SendData;
+        _defaultInputActions = new XRIDefaultInputActions();
+        _defaultInputActions.Synchronize.SetCallbacks(this);
+        _defaultInputActions.Synchronize.Enable();
         
         if (!photonView.IsMine)
         {
@@ -41,12 +43,6 @@ public class NetworkPlayer : MonoBehaviour
         
     }
 
-    void SendData(InputAction.CallbackContext context)
-    {
-        Debug.Log("ammerdaaaaaaaaaaaa");
-    }
-    
-
     void MapPosition(Transform target, XRNode node)
     {
         InputDevices.GetDeviceAtXRNode(node).TryGetFeatureValue(CommonUsages.devicePosition, out Vector3 position);
@@ -54,5 +50,10 @@ public class NetworkPlayer : MonoBehaviour
 
         target.position = position;
         target.rotation = rotation;
+    }
+
+    public void OnSendData(InputAction.CallbackContext context)
+    {
+        Debug.Log("ammerdaaaaaaaaaaaa");
     }
 }

@@ -1092,7 +1092,18 @@
                 {
                     "name": "",
                     "id": "a929aaed-a16a-4175-b734-a03bcea57fa2",
-                    "path": "<OpenVROculusTouchController>{LeftHand}/primaryButton",
+                    "path": "<OpenVROculusTouchController>{RightHand}/primaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SendData",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1b2b8a56-d816-4c19-950b-13ed6b6a73cd",
+                    "path": "<XRController>{RightHand}/triggerPressed",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
