@@ -323,6 +323,37 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 344757555150067889, guid: eb4d79be6df694142833568bec0bed4c,
+        type: 3}
+      propertyPath: _whenSelected.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 344757555150067889, guid: eb4d79be6df694142833568bec0bed4c,
+        type: 3}
+      propertyPath: _whenSelected.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 344757555150067889, guid: eb4d79be6df694142833568bec0bed4c,
+        type: 3}
+      propertyPath: _whenSelected.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2999729734061308422, guid: 27fe012bff0fea44aadcde90fee34ffc,
+        type: 3}
+    - target: {fileID: 344757555150067889, guid: eb4d79be6df694142833568bec0bed4c,
+        type: 3}
+      propertyPath: _whenSelected.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CoLocate
+      objectReference: {fileID: 0}
+    - target: {fileID: 344757555150067889, guid: eb4d79be6df694142833568bec0bed4c,
+        type: 3}
+      propertyPath: _whenSelected.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: CoLocationSynchronizer, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 344757555150067889, guid: eb4d79be6df694142833568bec0bed4c,
+        type: 3}
+      propertyPath: _whenSelected.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 344757555150067890, guid: eb4d79be6df694142833568bec0bed4c,
         type: 3}
       propertyPath: _hand
