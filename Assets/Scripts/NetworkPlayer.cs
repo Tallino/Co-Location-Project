@@ -4,14 +4,19 @@ using UnityEngine.XR;
 
 public class NetworkPlayer : MonoBehaviour
 {
-
-    public Transform head;
     private PhotonView photonView;
+    private GameObject Rig;
+    public GameObject head;
     
     // Start is called before the first frame update
     void Start()
     {
         photonView = GetComponent<PhotonView>();
+
+        Rig = GameObject.Find("OculusInteractionSampleRig");
+        Rig.transform.position = new Vector3(3, 0, 3);
+        //head.transform.position = new Vector3(2, 0, 2);
+        
     }
     
     // Update is called once per frame
@@ -19,11 +24,11 @@ public class NetworkPlayer : MonoBehaviour
     {
         if (photonView.IsMine)
         {
-            MapPosition(head, XRNode.Head);
+            MapPosition(head.transform, XRNode.Head);
            // MapPosition(leftHand, XRNode.LeftHand);
            // MapPosition(rightHand, XRNode.RightHand);
         }
-        
+        Debug.Log(head.gameObject.transform.position);
     }
   
     void MapPosition(Transform target, XRNode node)

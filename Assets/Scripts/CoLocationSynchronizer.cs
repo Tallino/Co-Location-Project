@@ -62,7 +62,7 @@ public class CoLocationSynchronizer : MonoBehaviour, XRIDefaultInputActions.ISyn
             var playerToPositionRotationalAngle = (Vector3)data[1];
 
             playerToBePositioned = PhotonView.Find(_idOfPlayerToBePositioned).gameObject;
-            
+
             // NOW POSITION playerToBePositioned in a point, to calculate using playerToPositionVectorToRightHand and playerToPositionRotationalAngle
         }
     }
@@ -80,7 +80,7 @@ public class CoLocationSynchronizer : MonoBehaviour, XRIDefaultInputActions.ISyn
         _rightHand = GameObject.Find("OculusHand_R");
         _leftHand = GameObject.Find("OculusHand_L");
         
-        if (!PhotonNetwork.IsMasterClient)
+        if (_photonView.ViewID == _idOfPlayerToBePositioned)
         {
             _vectorToRightHand = _rightHand.transform.position - _centerEyeAnchor.transform.position;
             _rotationalAngle = Vector3.Angle(_vectorToRightHand, _leftHand.transform.position - _rightHand.transform.position);
