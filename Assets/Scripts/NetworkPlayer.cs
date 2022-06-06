@@ -13,7 +13,7 @@ public class NetworkPlayer : MonoBehaviour
     {
         photonView = GetComponent<PhotonView>();
 
-        Rig = GameObject.Find("OculusInteractionSampleRig");
+        Rig = GameObject.Find("OVRCameraRig");
         Rig.transform.position = new Vector3(3, 0, 3);
         //head.transform.position = new Vector3(2, 0, 2);
         
