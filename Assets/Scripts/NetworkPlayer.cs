@@ -1,22 +1,25 @@
 using UnityEngine;
 using Photon.Pun;
-using UnityEngine.XR;
 
 public class NetworkPlayer : MonoBehaviour
 {
     private PhotonView photonView;
     private GameObject Rig;
-    public GameObject head;
+    private GameObject CenterEyeAnchor;
+    public Transform head;
+    
     
     // Start is called before the first frame update
     void Start()
     {
         photonView = GetComponent<PhotonView>();
-
         Rig = GameObject.Find("OVRCameraRig");
-        Rig.transform.position = new Vector3(3, 0, 3);
-        //head.transform.position = new Vector3(2, 0, 2);
-        
+        CenterEyeAnchor = GameObject.Find("CenterEyeAnchor");
+
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            Rig.transform.Translate(3,0,3);
+        }
     }
     
     // Update is called once per frame
@@ -24,19 +27,8 @@ public class NetworkPlayer : MonoBehaviour
     {
         if (photonView.IsMine)
         {
-            MapPosition(head.transform, XRNode.Head);
-           // MapPosition(leftHand, XRNode.LeftHand);
-           // MapPosition(rightHand, XRNode.RightHand);
+            head.position = CenterEyeAnchor.transform.position;
+            head.rotation = CenterEyeAnchor.transform.rotation;
         }
-        Debug.Log(head.gameObject.transform.position);
-    }
-  
-    void MapPosition(Transform target, XRNode node)
-    {
-        InputDevices.GetDeviceAtXRNode(node).TryGetFeatureValue(CommonUsages.devicePosition, out Vector3 position);
-        InputDevices.GetDeviceAtXRNode(node).TryGetFeatureValue(CommonUsages.deviceRotation, out Quaternion rotation);
-
-        target.position = position;
-        target.rotation = rotation;
     }
 }
