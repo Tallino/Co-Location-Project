@@ -80,18 +80,24 @@ public class CoLocationSynchronizer : MonoBehaviour, XRIDefaultInputActions.ISyn
 
     public void CoLocate()
     {
-        gameObject.GetPhotonView().ViewID);
-        Debug.Log("COLOCATE TRIGGERED");
-        //gameObject.GetPhotonView().RPC("SendPositionToMaster", RpcTarget.MasterClient);
+        if(PhotonNetwork.IsMasterClient)
+            Debug.Log(GetID());
+        
+        //PhotonView.Find(_idOfPlayerToBePositioned).RPC("SendPositionToMasterClient", RpcTarget.Others);
     }
 
-    [PunRPC]
-    void SendPositionToMaster()
+    private int GetID()
     {
-        Debug.Log("AMMMERDAAA");
-        /*
-        Debug.Log("RPC CALLED ON " + _photonView.ViewID);
+        return _idOfPlayerToBePositioned;
+    }
+    
+    [PunRPC]
+    void SendPositionToMasterClient()
+    {
         
+        Debug.Log("RPC CALLED ON " + gameObject.GetPhotonView().ViewID);
+        
+        /*
         _centerEyeAnchor = GameObject.Find("CenterEyeAnchor");
         _rightHand = GameObject.Find("OculusHand_R");
         _leftHand = GameObject.Find("OculusHand_L");
@@ -104,4 +110,5 @@ public class CoLocationSynchronizer : MonoBehaviour, XRIDefaultInputActions.ISyn
         PhotonNetwork.RaiseEvent(SendPositionForCoLocation, posInfoToSend, raiseEventOptions, SendOptions.SendReliable);
         Debug.Log("Sent position to Master Client");*/
     }
+    
 }
