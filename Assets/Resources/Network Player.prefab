@@ -157,7 +157,7 @@ GameObject:
   - component: {fileID: 4537731534161272673}
   - component: {fileID: 443463324644290697}
   - component: {fileID: 4263574429107287213}
-  - component: {fileID: 2999729734061308422}
+  - component: {fileID: 337852349553283379}
   m_Layer: 0
   m_Name: Network Player
   m_TagString: Player
@@ -195,7 +195,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObservedComponentsFoldoutOpen: 1
   Group: 0
-  prefixField: -1
+  prefixField: 0
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
@@ -217,7 +217,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   head: {fileID: 151313449936920027}
---- !u!114 &2999729734061308422
+--- !u!114 &337852349553283379
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
