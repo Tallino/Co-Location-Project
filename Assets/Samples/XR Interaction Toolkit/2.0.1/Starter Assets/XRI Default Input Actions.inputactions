@@ -1112,6 +1112,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "GestureDetection",
+            "id": "5571c2a5-63ad-4c01-8573-c34f8041b6a3",
+            "actions": [
+                {
+                    "name": "SaveGesture",
+                    "type": "Button",
+                    "id": "dfbd6bcf-2265-4e81-9c94-f632a4b85400",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "56c7b32f-b777-4eac-a782-5e7cb112c814",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SaveGesture",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

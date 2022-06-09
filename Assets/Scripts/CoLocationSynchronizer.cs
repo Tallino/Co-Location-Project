@@ -81,16 +81,11 @@ public class CoLocationSynchronizer : MonoBehaviour, XRIDefaultInputActions.ISyn
     public void CoLocate()
     {
         if(PhotonNetwork.IsMasterClient)
-            Debug.Log(GetID());
+            Debug.Log(_idOfPlayerToBePositioned);
         
         //PhotonView.Find(_idOfPlayerToBePositioned).RPC("SendPositionToMasterClient", RpcTarget.Others);
     }
 
-    private int GetID()
-    {
-        return _idOfPlayerToBePositioned;
-    }
-    
     [PunRPC]
     void SendPositionToMasterClient()
     {

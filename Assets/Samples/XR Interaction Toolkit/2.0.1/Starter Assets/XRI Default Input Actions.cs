@@ -1134,6 +1134,34 @@ public partial class @XRIDefaultInputActions : IInputActionCollection2, IDisposa
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""GestureDetection"",
+            ""id"": ""5571c2a5-63ad-4c01-8573-c34f8041b6a3"",
+            ""actions"": [
+                {
+                    ""name"": ""SaveGesture"",
+                    ""type"": ""Button"",
+                    ""id"": ""dfbd6bcf-2265-4e81-9c94-f632a4b85400"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""56c7b32f-b777-4eac-a782-5e7cb112c814"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SaveGesture"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -1250,6 +1278,9 @@ public partial class @XRIDefaultInputActions : IInputActionCollection2, IDisposa
         // Synchronize
         m_Synchronize = asset.FindActionMap("Synchronize", throwIfNotFound: true);
         m_Synchronize_SendData = m_Synchronize.FindAction("SendData", throwIfNotFound: true);
+        // GestureDetection
+        m_GestureDetection = asset.FindActionMap("GestureDetection", throwIfNotFound: true);
+        m_GestureDetection_SaveGesture = m_GestureDetection.FindAction("SaveGesture", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1801,6 +1832,39 @@ public partial class @XRIDefaultInputActions : IInputActionCollection2, IDisposa
         }
     }
     public SynchronizeActions @Synchronize => new SynchronizeActions(this);
+
+    // GestureDetection
+    private readonly InputActionMap m_GestureDetection;
+    private IGestureDetectionActions m_GestureDetectionActionsCallbackInterface;
+    private readonly InputAction m_GestureDetection_SaveGesture;
+    public struct GestureDetectionActions
+    {
+        private @XRIDefaultInputActions m_Wrapper;
+        public GestureDetectionActions(@XRIDefaultInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @SaveGesture => m_Wrapper.m_GestureDetection_SaveGesture;
+        public InputActionMap Get() { return m_Wrapper.m_GestureDetection; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(GestureDetectionActions set) { return set.Get(); }
+        public void SetCallbacks(IGestureDetectionActions instance)
+        {
+            if (m_Wrapper.m_GestureDetectionActionsCallbackInterface != null)
+            {
+                @SaveGesture.started -= m_Wrapper.m_GestureDetectionActionsCallbackInterface.OnSaveGesture;
+                @SaveGesture.performed -= m_Wrapper.m_GestureDetectionActionsCallbackInterface.OnSaveGesture;
+                @SaveGesture.canceled -= m_Wrapper.m_GestureDetectionActionsCallbackInterface.OnSaveGesture;
+            }
+            m_Wrapper.m_GestureDetectionActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @SaveGesture.started += instance.OnSaveGesture;
+                @SaveGesture.performed += instance.OnSaveGesture;
+                @SaveGesture.canceled += instance.OnSaveGesture;
+            }
+        }
+    }
+    public GestureDetectionActions @GestureDetection => new GestureDetectionActions(this);
     private int m_GenericXRControllerSchemeIndex = -1;
     public InputControlScheme GenericXRControllerScheme
     {
@@ -1888,5 +1952,9 @@ public partial class @XRIDefaultInputActions : IInputActionCollection2, IDisposa
     public interface ISynchronizeActions
     {
         void OnSendData(InputAction.CallbackContext context);
+    }
+    public interface IGestureDetectionActions
+    {
+        void OnSaveGesture(InputAction.CallbackContext context);
     }
 }

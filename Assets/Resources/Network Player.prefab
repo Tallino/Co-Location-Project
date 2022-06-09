@@ -158,6 +158,7 @@ GameObject:
   - component: {fileID: 443463324644290697}
   - component: {fileID: 4263574429107287213}
   - component: {fileID: 337852349553283379}
+  - component: {fileID: 3904608579791539354}
   m_Layer: 0
   m_Name: Network Player
   m_TagString: Player
@@ -229,3 +230,59 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23c41c6c0cdf52e4081a6d923ad38184, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3904608579791539354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6414283889443419497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27004de407725df47bee96e8e690bf38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  threshold: 0.01
+  debugMode: 1
+  gestures:
+  - name: Pinch
+    fingerDatas:
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: -0.020069025, y: -0.011553987, z: -0.010496992}
+    - {x: -0.035958406, y: -0.019157711, z: -0.028028488}
+    - {x: -0.05874295, y: -0.038793586, z: -0.040372945}
+    - {x: -0.08727258, y: -0.056753203, z: -0.03803173}
+    - {x: -0.09599618, y: -0.0073164674, z: -0.02355068}
+    - {x: -0.12662032, y: -0.02898899, z: -0.017987879}
+    - {x: -0.119872615, y: -0.052337, z: -0.0179077}
+    - {x: -0.09564659, y: -0.0025431637, z: -0.0017258939}
+    - {x: -0.13675812, y: -0.010835194, z: 0.0074287825}
+    - {x: -0.16266128, y: -0.01808537, z: 0.01338212}
+    - {x: -0.08869382, y: -0.0065293037, z: 0.017465265}
+    - {x: -0.12610148, y: -0.010923772, z: 0.027566833}
+    - {x: -0.15133634, y: -0.015955236, z: 0.034202415}
+    - {x: -0.034073547, y: -0.009419838, z: 0.022998573}
+    - {x: -0.0778958, y: -0.013691179, z: 0.035054054}
+    - {x: -0.10527181, y: -0.01723527, z: 0.048534974}
+    - {x: -0.12236219, y: -0.02323619, z: 0.05772516}
+    - {x: -0.10534075, y: -0.068608694, z: -0.026233492}
+    - {x: -0.10475917, y: -0.06884598, z: -0.018451395}
+    - {x: -0.18631995, y: -0.023547849, z: 0.019303534}
+    - {x: -0.17486963, y: -0.0197608, z: 0.039312657}
+    - {x: -0.14214864, y: -0.027204089, z: 0.06637844}
+    onRecognized:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 337852349553283379}
+          m_TargetAssemblyTypeName: CoLocationSynchronizer, Assembly-CSharp
+          m_MethodName: CoLocate
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
