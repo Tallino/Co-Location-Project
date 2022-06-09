@@ -59,9 +59,10 @@ public class CoLocationSynchronizer : MonoBehaviour, XRIDefaultInputActions.ISyn
         {
             Debug.Log("Master Client received the position");
             object[] data = (object[]) photonEvent.CustomData;
+            
             var playerToPositionVectorToRightHand = (Vector3)data[0];
-            var playerToPositionRotationalAngle = (Vector3)data[1];
-
+            var playerToPositionRotationalAngle = (float)data[1];
+            
             Debug.Log("Received position: " + playerToPositionVectorToRightHand);
             Debug.Log("Received rotation: " + playerToPositionRotationalAngle);
             

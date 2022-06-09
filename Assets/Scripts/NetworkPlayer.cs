@@ -3,21 +3,26 @@ using Photon.Pun;
 
 public class NetworkPlayer : MonoBehaviour
 {
-    private GameObject Rig;
-    private GameObject CenterEyeAnchor;
+    private GameObject _rig;
+    private GameObject _centerEyeAnchor;
     public Transform head;
+    public GameObject leftEye;
+    public GameObject rightEye;
 
     // Start is called before the first frame update
     void Start()
     {
-        Rig = GameObject.Find("OVRCameraRig");
-        CenterEyeAnchor = GameObject.Find("CenterEyeAnchor");
+        _rig = GameObject.Find("OVRCameraRig");
+        _centerEyeAnchor = GameObject.Find("CenterEyeAnchor");
+
+        if (gameObject.GetPhotonView().IsMine)
+        {
+            leftEye.GetComponent<MeshRenderer>().enabled = false;
+            rightEye.GetComponent<MeshRenderer>().enabled = false;
+        }
 
         if (!PhotonNetwork.IsMasterClient)
-        {
-            Rig.transform.Translate(3,0,3);
-            Rig.transform.Rotate(0,180,0);
-        }
+            _rig.transform.Translate(3,0,3);
     }
     
     // Update is called once per frame
@@ -25,8 +30,8 @@ public class NetworkPlayer : MonoBehaviour
     {
         if (gameObject.GetPhotonView().IsMine)
         {
-            head.position = CenterEyeAnchor.transform.position;
-            head.rotation = CenterEyeAnchor.transform.rotation;
+            head.position = _centerEyeAnchor.transform.position;
+            head.rotation = _centerEyeAnchor.transform.rotation;
         }
     }
 }
