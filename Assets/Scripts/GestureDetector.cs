@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
-[System.Serializable]
+[Serializable]
 public struct Gesture
 {
     public string name;
@@ -16,21 +16,22 @@ public struct Gesture
 
 public class GestureDetector : MonoBehaviour, XRIDefaultInputActions.IGestureDetectionActions
 {
-    XRIDefaultInputActions _defaultInputActions;
+    private XRIDefaultInputActions _defaultInputActions;
 
     public float threshold = 0.1f;
     public bool debugMode = true;
     public List<Gesture> gestures;
+    private bool _fingersReady = false;
     private OVRSkeleton _skeleton;
     private List<OVRBone> _fingerBones;
-    private Gesture previousGesture;
+    private Gesture _previousGesture;
 
     // Start is called before the first frame update
     void Start()
     {
         _skeleton = GameObject.Find("OVRRightHandPrefab").GetComponent<OVRSkeleton>();
         _defaultInputActions = new XRIDefaultInputActions();
-        previousGesture = new Gesture();
+        _previousGesture = new Gesture();
         
         StartCoroutine(DelayInitBones());
 
@@ -39,29 +40,36 @@ public class GestureDetector : MonoBehaviour, XRIDefaultInputActions.IGestureDet
             _defaultInputActions.GestureDetection.SetCallbacks(this);
             _defaultInputActions.GestureDetection.Enable();
         }
-
     }
 
     public void Update()
     {
-        Gesture currentGesture = Recognize();
-        bool hasRecognized = !currentGesture.Equals(new Gesture());
-        
-        //Check if new gesture
-        if (hasRecognized && !currentGesture.Equals(previousGesture))
+        if (_fingersReady)
         {
-            Debug.Log("New Gesture Found: " + currentGesture.name);
-            previousGesture = currentGesture;
-            currentGesture.onRecognized.Invoke();
+            Gesture currentGesture = Recognize();
+
+            bool hasRecognized = !currentGesture.Equals(new Gesture());
+
+            //Check if new gesture
+            if (hasRecognized && !currentGesture.Equals(_previousGesture))
+            {
+                Debug.Log("New Gesture Found: " + currentGesture.name);
+                _previousGesture = currentGesture;
+                
+                if(currentGesture.onRecognized != null)
+                    currentGesture.onRecognized.Invoke();
+            }
         }
     }
 
-    public IEnumerator DelayInitBones()
+    private IEnumerator DelayInitBones()
     {
         while (!_skeleton.IsInitialized)
             yield return null;
 
         _fingerBones = new List<OVRBone>(_skeleton.Bones);
+        _fingersReady = true;
+        Debug.Log("Finger Bones have been initialized");
     }
 
     void Save()
@@ -75,9 +83,9 @@ public class GestureDetector : MonoBehaviour, XRIDefaultInputActions.IGestureDet
             // finger position relative to root
             data.Add(_skeleton.transform.InverseTransformPoint(bone.Transform.position));
         }
-
         g.fingerDatas = data;
         gestures.Add(g);
+        Debug.Log("Added new gesture");
     }
 
     public void OnSaveGesture(InputAction.CallbackContext context)

@@ -16,6 +16,7 @@ public class NetworkPlayer : MonoBehaviour
         if (!PhotonNetwork.IsMasterClient)
         {
             Rig.transform.Translate(3,0,3);
+            Rig.transform.Rotate(0,180,0);
         }
     }
     

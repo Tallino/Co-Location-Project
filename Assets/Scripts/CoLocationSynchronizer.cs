@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 
 public class CoLocationSynchronizer : MonoBehaviour, XRIDefaultInputActions.ISynchronizeActions
 {
-    XRIDefaultInputActions _defaultInputActions;
+    private XRIDefaultInputActions _defaultInputActions;
 
     private const byte SendIDForSync = 1;
     private const byte SendPositionForCoLocation = 2;
@@ -62,8 +62,8 @@ public class CoLocationSynchronizer : MonoBehaviour, XRIDefaultInputActions.ISyn
             var playerToPositionVectorToRightHand = (Vector3)data[0];
             var playerToPositionRotationalAngle = (Vector3)data[1];
 
-            Debug.Log(playerToPositionVectorToRightHand);
-            Debug.Log(playerToPositionRotationalAngle);
+            Debug.Log("Received position: " + playerToPositionVectorToRightHand);
+            Debug.Log("Received rotation: " + playerToPositionRotationalAngle);
             
             playerToBePositioned = PhotonView.Find(_idOfPlayerToBePositioned).gameObject;
 
@@ -80,30 +80,25 @@ public class CoLocationSynchronizer : MonoBehaviour, XRIDefaultInputActions.ISyn
 
     public void CoLocate()
     {
-        if(PhotonNetwork.IsMasterClient)
-            Debug.Log(_idOfPlayerToBePositioned);
+        Debug.Log("Co-Location initializing");
+        Debug.Log("Hands can be seen by " + gameObject.GetPhotonView());
         
-        //PhotonView.Find(_idOfPlayerToBePositioned).RPC("SendPositionToMasterClient", RpcTarget.Others);
-    }
-
-    [PunRPC]
-    void SendPositionToMasterClient()
-    {
-        
-        Debug.Log("RPC CALLED ON " + gameObject.GetPhotonView().ViewID);
-        
-        /*
-        _centerEyeAnchor = GameObject.Find("CenterEyeAnchor");
-        _rightHand = GameObject.Find("OculusHand_R");
-        _leftHand = GameObject.Find("OculusHand_L");
-        
-        _vectorToRightHand = _rightHand.transform.position - _centerEyeAnchor.transform.position;
-        _rotationalAngle = Vector3.Angle(_vectorToRightHand, _leftHand.transform.position - _rightHand.transform.position);
-
-        object[] posInfoToSend = {_vectorToRightHand, _rotationalAngle};
-        RaiseEventOptions raiseEventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.MasterClient};
-        PhotonNetwork.RaiseEvent(SendPositionForCoLocation, posInfoToSend, raiseEventOptions, SendOptions.SendReliable);
-        Debug.Log("Sent position to Master Client");*/
-    }
+        if (gameObject.GetPhotonView().ViewID == _idOfPlayerToBePositioned)
+        {
+            _centerEyeAnchor = GameObject.Find("CenterEyeAnchor");
+            _rightHand = GameObject.Find("OVRRightHandPrefab");
+            _leftHand = GameObject.Find("OVRLeftHandPrefab");
     
+            _vectorToRightHand = _rightHand.transform.position - _centerEyeAnchor.transform.position;
+            _rotationalAngle = Vector3.Angle(_vectorToRightHand, _leftHand.transform.position - _rightHand.transform.position);
+            
+            Debug.Log("VectorToRightHand to send to Master is : " + _vectorToRightHand);
+            Debug.Log("RotationalAngle to send to Master is : " + _rotationalAngle);
+            
+            object[] posInfoToSend = {_vectorToRightHand, _rotationalAngle};
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.MasterClient};
+            PhotonNetwork.RaiseEvent(SendPositionForCoLocation, posInfoToSend, raiseEventOptions, SendOptions.SendReliable);
+            Debug.Log("Sent position to Master Client");
+        }
+    }
 }
