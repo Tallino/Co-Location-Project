@@ -15,6 +15,7 @@ public class NetworkPlayer : MonoBehaviour
         _rig = GameObject.Find("OVRCameraRig");
         _centerEyeAnchor = GameObject.Find("CenterEyeAnchor");
 
+        
         if (gameObject.GetPhotonView().IsMine)
         {
             leftEye.GetComponent<MeshRenderer>().enabled = false;

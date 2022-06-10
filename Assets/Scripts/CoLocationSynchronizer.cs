@@ -1,5 +1,6 @@
 using System;
 using ExitGames.Client.Photon;
+using ExitGames.Client.Photon.StructWrapping;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
@@ -16,23 +17,27 @@ public class CoLocationSynchronizer : MonoBehaviour, XRIDefaultInputActions.ISyn
     private GameObject _centerEyeAnchor;
     private GameObject _rightHand;
     private GameObject _leftHand;
-    private GameObject playerToBePositioned;
     private Vector3 _vectorToRightHand;
     private float _rotationalAngle;
-    
-
+    private Vector3 _masterClientVectorToRightHand;
+    private float _masterClientRotationalAngle;
 
     public void Start()
     {
         _defaultInputActions = new XRIDefaultInputActions();
-            
+        
+        _centerEyeAnchor = GameObject.Find("CenterEyeAnchor");
+        _rightHand = GameObject.Find("OVRRightHandPrefab");
+        _leftHand = GameObject.Find("OVRLeftHandPrefab");
+
         if (!PhotonNetwork.IsMasterClient)
         {
             _defaultInputActions.Synchronize.SetCallbacks(this);
             _defaultInputActions.Synchronize.Enable();
         }
     }
-
+    
+    
     private void OnEnable()
     {
         PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
@@ -46,6 +51,7 @@ public class CoLocationSynchronizer : MonoBehaviour, XRIDefaultInputActions.ISyn
 
     private void OnEvent(EventData photonEvent)
     {
+        //Event triggered by grip button: received the id of the player who wants to be positioned
         if (photonEvent.Code == SendIDForSync && PhotonNetwork.IsMasterClient)
         {
             if ((int) photonEvent.CustomData != MasterClientViewId)
@@ -55,9 +61,10 @@ public class CoLocationSynchronizer : MonoBehaviour, XRIDefaultInputActions.ISyn
             }
         }
 
-        if (photonEvent.Code == SendPositionForCoLocation && PhotonNetwork.IsMasterClient)
+        //Event triggered by bunny hand gesture: received the position of the player who wants to be positioned
+        if (photonEvent.Code == SendPositionForCoLocation && gameObject.GetPhotonView().ViewID == MasterClientViewId)
         {
-            Debug.Log("Master Client received the position");
+            Debug.Log("Master Client " + gameObject.GetPhotonView().ViewID + " received position from client " + _idOfPlayerToBePositioned);
             object[] data = (object[]) photonEvent.CustomData;
             
             var playerToPositionVectorToRightHand = (Vector3)data[0];
@@ -66,9 +73,11 @@ public class CoLocationSynchronizer : MonoBehaviour, XRIDefaultInputActions.ISyn
             Debug.Log("Received position: " + playerToPositionVectorToRightHand);
             Debug.Log("Received rotation: " + playerToPositionRotationalAngle);
             
-            playerToBePositioned = PhotonView.Find(_idOfPlayerToBePositioned).gameObject;
-
-            // NOW POSITION playerToBePositioned in a point, to calculate using playerToPositionVectorToRightHand and playerToPositionRotationalAngle
+            _masterClientVectorToRightHand = _rightHand.transform.position - _centerEyeAnchor.transform.position;
+            _masterClientRotationalAngle = Vector3.Angle(_vectorToRightHand, _leftHand.transform.position - _rightHand.transform.position);
+            
+            Debug.Log("Master client " + gameObject.GetPhotonView().ViewID + " position: " + _masterClientVectorToRightHand);
+            Debug.Log("Master client " + gameObject.GetPhotonView().ViewID + " rotation: " + _masterClientRotationalAngle);
         }
     }
 
@@ -86,13 +95,10 @@ public class CoLocationSynchronizer : MonoBehaviour, XRIDefaultInputActions.ISyn
         
         if (gameObject.GetPhotonView().ViewID == _idOfPlayerToBePositioned)
         {
-            _centerEyeAnchor = GameObject.Find("CenterEyeAnchor");
-            _rightHand = GameObject.Find("OVRRightHandPrefab");
-            _leftHand = GameObject.Find("OVRLeftHandPrefab");
-    
             _vectorToRightHand = _rightHand.transform.position - _centerEyeAnchor.transform.position;
             _rotationalAngle = Vector3.Angle(_vectorToRightHand, _leftHand.transform.position - _rightHand.transform.position);
             
+            Debug.Log("My view ID is: " + gameObject.GetPhotonView().ViewID);
             Debug.Log("VectorToRightHand to send to Master is : " + _vectorToRightHand);
             Debug.Log("RotationalAngle to send to Master is : " + _rotationalAngle);
             
