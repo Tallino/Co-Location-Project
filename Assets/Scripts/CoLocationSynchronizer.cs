@@ -14,6 +14,7 @@ public class CoLocationSynchronizer : MonoBehaviour, XRIDefaultInputActions.ISyn
     private const byte SendPositionForCoLocation = 2;
     private int _idOfPlayerToBePositioned;
     private const int MasterClientViewId = 1001;
+    private GameObject _ovrCameraRig;
     private GameObject _centerEyeAnchor;
     private GameObject _rightHand;
     private GameObject _leftHand;
@@ -104,10 +105,11 @@ public class CoLocationSynchronizer : MonoBehaviour, XRIDefaultInputActions.ISyn
         if (gameObject.GetPhotonView().ViewID == _idOfPlayerToBePositioned)
         {
             Debug.Log("RPC FUNCTION IS ABOUT TO GET EXECUTED BY " + gameObject.GetPhotonView());
+            
             _centerEyeAnchor = GameObject.Find("CenterEyeAnchor");
             _rightHand = GameObject.Find("OVRRightHandPrefab");
             _leftHand = GameObject.Find("OVRLeftHandPrefab");
-
+            
             _vectorToRightHand = _rightHand.transform.position - _centerEyeAnchor.transform.position;
             _rotationalAngle = Vector3.Angle(_vectorToRightHand, _leftHand.transform.position - _rightHand.transform.position);
 
