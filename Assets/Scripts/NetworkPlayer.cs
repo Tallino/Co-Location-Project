@@ -3,26 +3,31 @@ using Photon.Pun;
 
 public class NetworkPlayer : MonoBehaviour
 {
-    private GameObject _rig;
+    public GameObject rig;
     private GameObject _centerEyeAnchor;
+    public Transform head;
 
     // Start is called before the first frame update
     void Start()
     {
-        _rig = GameObject.Find("OVRCameraRig");
-        _centerEyeAnchor = GameObject.Find("CenterEyeAnchor");
+        if (gameObject.GetPhotonView().IsMine)
+        {
+            GameObject myRig = Instantiate(rig, transform.position, transform.rotation);
+            myRig.transform.parent = transform;
 
-        if (!PhotonNetwork.IsMasterClient)
-            _rig.transform.position = new Vector3(3, 0, 3);
+            _centerEyeAnchor = transform.Find("OVRCameraRig(Clone)").Find("TrackingSpace").Find("CenterEyeAnchor").gameObject;
+
+            if (!PhotonNetwork.IsMasterClient)
+                myRig.transform.position = new Vector3(3, 0, 3);
+        }
     }
-    
-    // Update is called once per frame
-    void Update()
+
+    private void Update()
     {
         if (gameObject.GetPhotonView().IsMine)
         {
-            gameObject.transform.position = _centerEyeAnchor.transform.position;
-            gameObject.transform.rotation = _centerEyeAnchor.transform.rotation;
+            head.position = _centerEyeAnchor.transform.position;
+            head.rotation = _centerEyeAnchor.transform.rotation;
         }
     }
 }
