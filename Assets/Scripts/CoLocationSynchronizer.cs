@@ -4,7 +4,7 @@ using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CoLocationSynchronizer : MonoBehaviour, XRIDefaultInputActions.ISynchronizeActions
+public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInputActions.ISynchronizeActions
 {
     private XRIDefaultInputActions _defaultInputActions;
 
@@ -20,13 +20,11 @@ public class CoLocationSynchronizer : MonoBehaviour, XRIDefaultInputActions.ISyn
     private float _rotationalAngle;
     private Vector3 _masterClientVectorToRightHand;
     private float _masterClientRotationalAngle;
-    private GameObject _rig;
 
     public void Start()
     {
         _defaultInputActions = new XRIDefaultInputActions();
-        _rig = GameObject.Find("OVRCameraRig");
-            
+
         if (!PhotonNetwork.IsMasterClient)
         {
             _defaultInputActions.Synchronize.SetCallbacks(this);
@@ -34,12 +32,12 @@ public class CoLocationSynchronizer : MonoBehaviour, XRIDefaultInputActions.ISyn
         }
     }
 
-    private void OnEnable()
+    public override void OnEnable()
     {
         PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
     }
 
-    private void OnDisable()
+    public override void OnDisable()
     {
         PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
     }
@@ -47,7 +45,7 @@ public class CoLocationSynchronizer : MonoBehaviour, XRIDefaultInputActions.ISyn
     private void OnEvent(EventData photonEvent)
     {
         //Event triggered by grip button: received the id of the player who wants to be positioned
-        if (photonEvent.Code == SendIDForSync && PhotonNetwork.IsMasterClient)
+        if (photonEvent.Code == SendIDForSync)
         {
             if ((int) photonEvent.CustomData != MasterClientViewId)
             {
@@ -57,8 +55,13 @@ public class CoLocationSynchronizer : MonoBehaviour, XRIDefaultInputActions.ISyn
         }
 
         //Event triggered by bunny hand gesture: received the position of the player who wants to be positioned
-        if (photonEvent.Code == SendPositionForCoLocation && gameObject.GetPhotonView().ViewID == MasterClientViewId)
+        if (photonEvent.Code == SendPositionForCoLocation)
         {
+            Vector3 position = (Vector3) photonEvent.CustomData;
+            
+            Debug.Log("POSITION IS: " + position);
+            
+            /*
             Debug.Log("Master Client " + gameObject.GetPhotonView().ViewID + " received position from client " + _idOfPlayerToBePositioned);
             object[] data = (object[]) photonEvent.CustomData;
             
@@ -77,16 +80,20 @@ public class CoLocationSynchronizer : MonoBehaviour, XRIDefaultInputActions.ISyn
             
             Debug.Log("Master client " + gameObject.GetPhotonView().ViewID + " position: " + _masterClientVectorToRightHand);
             Debug.Log("Master client " + gameObject.GetPhotonView().ViewID + " rotation: " + _masterClientRotationalAngle);
+            */
         }
     }
 
     public void OnSendData(InputAction.CallbackContext context)
     {
         Debug.Log("My View Id is " + gameObject.GetPhotonView().ViewID);
+        _idOfPlayerToBePositioned = gameObject.GetPhotonView().ViewID;
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.MasterClient};
         PhotonNetwork.RaiseEvent(SendIDForSync, gameObject.GetPhotonView().ViewID, raiseEventOptions, SendOptions.SendReliable);
     }
 
+    
+    // Function triggered with hand gesture
     public void CoLocate()
     {
         if(_idOfPlayerToBePositioned == 0)
@@ -97,26 +104,31 @@ public class CoLocationSynchronizer : MonoBehaviour, XRIDefaultInputActions.ISyn
         
         if (gameObject.GetPhotonView().IsMine)
         {
-            _centerEyeAnchor = GameObject.Find("CenterEyeAnchor");
-            _rightHand = GameObject.Find("OVRRightHandPrefab");
-            _leftHand = GameObject.Find("OVRLeftHandPrefab");
+            _centerEyeAnchor = transform.Find("OVRCameraRig(Clone)").Find("TrackingSpace").Find("CenterEyeAnchor").gameObject;
+                
+            // Sending position to master client
+            PhotonView.Find(_idOfPlayerToBePositioned).RPC("SendPositionToMasterClient", RpcTarget.All, _centerEyeAnchor.transform.position);
             
+            /*
             _vectorToRightHand = _rightHand.transform.position - _centerEyeAnchor.transform.position;
             _rotationalAngle = Vector3.Angle(_vectorToRightHand, _leftHand.transform.position - _rightHand.transform.position);
 
             object[] posInfoToSend = {_vectorToRightHand, _rotationalAngle};
-
+            
             Debug.Log(_rig.transform.position);
             PhotonView.Find(_idOfPlayerToBePositioned).RPC("SendPositionToMasterClient", RpcTarget.MasterClient, posInfoToSend as object);
+            */
         }
     }
     
+
     [PunRPC]
-    public void SendPositionToMasterClient(object[] posInfoToSend)
+    public void SendPositionToMasterClient(Vector3 position)
     {
-        Debug.Log(_rig.transform.position);
         Debug.Log("RPC RECEIVED");
+        Debug.Log("POSITION: " + position);
         
+        /*
         var playerToPositionVectorToRightHand = (Vector3)posInfoToSend[0];
         var playerToPositionRotationalAngle = (float)posInfoToSend[1];
         
@@ -133,12 +145,8 @@ public class CoLocationSynchronizer : MonoBehaviour, XRIDefaultInputActions.ISyn
         
         Debug.Log("Master client " + gameObject.GetPhotonView().ViewID + " position: " + _masterClientVectorToRightHand);
         Debug.Log("Master client " + gameObject.GetPhotonView().ViewID + " rotation: " + _masterClientRotationalAngle);
-        Debug.Log("Master client " + gameObject.GetPhotonView().ViewID + " magnitude: " + _masterClientVectorToRightHand.magnitude);
-        
-        /*
-        RaiseEventOptions raiseEventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.MasterClient};
-        PhotonNetwork.RaiseEvent(SendPositionForCoLocation, posInfoToSend, raiseEventOptions, SendOptions.SendReliable);
-        Debug.Log("Sent position to Master Client");
+        Debug.Log("Master client " + gameObject.GetPhotonView().ViewID + " magnitude: " + _masterClientVectorToRightHand.magnitude); 
         */
+
     }
 }
