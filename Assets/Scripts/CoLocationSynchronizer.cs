@@ -48,7 +48,7 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
         }
 
         //Event triggered by bunny hand gesture: received the position of the player who wants to be positioned
-        if (photonEvent.Code == SendPositionForCoLocation)
+        if (photonEvent.Code == SendPositionForCoLocation && gameObject.GetPhotonView().IsMine)
         {
             Debug.Log("Master Client " + gameObject.GetPhotonView().ViewID + " received position from client " + _idOfPlayerToBePositioned);
             object[] data = (object[]) photonEvent.CustomData;
@@ -70,12 +70,14 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
             Debug.Log("Master client " + gameObject.GetPhotonView().ViewID + " vector to right hand: " + tempMasterClientVectorToRightHand);
             Debug.Log("Master client " + gameObject.GetPhotonView().ViewID + " distance to right hand: " + tempMasterClientVectorToRightHand.magnitude);
             Debug.Log("Master client " + gameObject.GetPhotonView().ViewID + " rotation angle respect to hands: " + tempMasterClientRotationalAngle);
+            
+            //CALCULATIONS FOR FINAL POSITION
+            
         }
     }
 
     public void OnSendData(InputAction.CallbackContext context)
     {
-        Debug.Log("My View Id is " + gameObject.GetPhotonView().ViewID);
         _idOfPlayerToBePositioned = gameObject.GetPhotonView().ViewID;
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.MasterClient};
         PhotonNetwork.RaiseEvent(SendIDForSync, gameObject.GetPhotonView().ViewID, raiseEventOptions, SendOptions.SendReliable);
