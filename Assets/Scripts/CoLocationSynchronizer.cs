@@ -13,13 +13,6 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
     private int _idOfPlayerToBePositioned;
     private const int MasterClientViewId = 1001;
     private GameObject _ovrCameraRig;
-    private GameObject _centerEyeAnchor;
-    private GameObject _rightHand;
-    private GameObject _leftHand;
-    private Vector3 _vectorToRightHand;
-    private float _rotationalAngle;
-    private Vector3 _masterClientVectorToRightHand;
-    private float _masterClientRotationalAngle;
 
     public void Start()
     {
@@ -57,10 +50,6 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
         //Event triggered by bunny hand gesture: received the position of the player who wants to be positioned
         if (photonEvent.Code == SendPositionForCoLocation)
         {
-            Vector3 position = (Vector3) photonEvent.CustomData;
-            
-            Debug.Log("POSITION IS: " + position);
-            
             /*
             Debug.Log("Master Client " + gameObject.GetPhotonView().ViewID + " received position from client " + _idOfPlayerToBePositioned);
             object[] data = (object[]) photonEvent.CustomData;
@@ -100,53 +89,49 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
             return;
         
         Debug.Log("Co-Location initializing");
-        Debug.Log("Hands can be seen by " + gameObject.GetPhotonView());
         
-        if (gameObject.GetPhotonView().IsMine)
+        if (gameObject.GetPhotonView().IsMine && gameObject.GetPhotonView().ViewID == _idOfPlayerToBePositioned)
         {
-            _centerEyeAnchor = transform.Find("OVRCameraRig(Clone)").Find("TrackingSpace").Find("CenterEyeAnchor").gameObject;
-                
-            // Sending position to master client
-            PhotonView.Find(_idOfPlayerToBePositioned).RPC("SendPositionToMasterClient", RpcTarget.All, _centerEyeAnchor.transform.position);
-            
-            /*
-            _vectorToRightHand = _rightHand.transform.position - _centerEyeAnchor.transform.position;
-            _rotationalAngle = Vector3.Angle(_vectorToRightHand, _leftHand.transform.position - _rightHand.transform.position);
+            var tempCenterEyeAnchor = transform.Find("OVRCameraRig(Clone)").Find("TrackingSpace").Find("CenterEyeAnchor").gameObject;
+            var tempRightHand = transform.Find("OVRCameraRig(Clone)").Find("TrackingSpace").Find("RightHandAnchor").gameObject;
+            var tempLeftHand = transform.Find("OVRCameraRig(Clone)").Find("TrackingSpace").Find("LeftHandAnchor").gameObject;
 
-            object[] posInfoToSend = {_vectorToRightHand, _rotationalAngle};
+            var tempVectorToRightHand = tempRightHand.transform.position - tempCenterEyeAnchor.transform.position;
+            var tempRotationalAngle = Vector3.Angle(tempVectorToRightHand, tempLeftHand.transform.position - tempRightHand.transform.position);
+
+            object[] posInfoToSend = {tempVectorToRightHand, tempRotationalAngle};
             
-            Debug.Log(_rig.transform.position);
+            // Sending position to master client
             PhotonView.Find(_idOfPlayerToBePositioned).RPC("SendPositionToMasterClient", RpcTarget.MasterClient, posInfoToSend as object);
-            */
         }
     }
     
-
     [PunRPC]
-    public void SendPositionToMasterClient(Vector3 position)
+    public void SendPositionToMasterClient(object[] posInfoToSend)
     {
-        Debug.Log("RPC RECEIVED");
-        Debug.Log("POSITION: " + position);
-        
-        /*
-        var playerToPositionVectorToRightHand = (Vector3)posInfoToSend[0];
-        var playerToPositionRotationalAngle = (float)posInfoToSend[1];
-        
-        Debug.Log("Received position: " + playerToPositionVectorToRightHand);
-        Debug.Log("Received rotation: " + playerToPositionRotationalAngle);
-        Debug.Log("Received magnitude: " + playerToPositionVectorToRightHand.magnitude);
+            Debug.Log("RPC RECEIVED by: " + gameObject.GetPhotonView().ViewID);
 
-        _centerEyeAnchor = GameObject.Find("CenterEyeAnchor");
-        _rightHand = GameObject.Find("OVRRightHandPrefab");
-        _leftHand = GameObject.Find("OVRLeftHandPrefab");
+            var tempPlayerToPositionVectorToRightHand = (Vector3) posInfoToSend[0];
+            var tempPlayerToPositionRotationalAngle = (float) posInfoToSend[1];
+
+            Debug.Log("Received " + _idOfPlayerToBePositioned + " vector to right hand: " + tempPlayerToPositionVectorToRightHand);
+            Debug.Log("Received " + _idOfPlayerToBePositioned + " distance to right hand: " + tempPlayerToPositionVectorToRightHand.magnitude);
+            Debug.Log("Received " + _idOfPlayerToBePositioned + " rotation angle respect to hands: " + tempPlayerToPositionRotationalAngle);
             
-        _masterClientVectorToRightHand = _rightHand.transform.position - _centerEyeAnchor.transform.position;
-        _masterClientRotationalAngle = Vector3.Angle(_vectorToRightHand, _leftHand.transform.position - _rightHand.transform.position);
-        
-        Debug.Log("Master client " + gameObject.GetPhotonView().ViewID + " position: " + _masterClientVectorToRightHand);
-        Debug.Log("Master client " + gameObject.GetPhotonView().ViewID + " rotation: " + _masterClientRotationalAngle);
-        Debug.Log("Master client " + gameObject.GetPhotonView().ViewID + " magnitude: " + _masterClientVectorToRightHand.magnitude); 
-        */
+            var tempMasterClientCenterEyeAnchor = transform.Find("OVRCameraRig(Clone)").Find("TrackingSpace").Find("CenterEyeAnchor").gameObject;
+            var tempMasterClientRightHand = transform.Find("OVRCameraRig(Clone)").Find("TrackingSpace").Find("RightHandAnchor").gameObject;
+            var tempMasterClientLeftHand = transform.Find("OVRCameraRig(Clone)").Find("TrackingSpace").Find("LeftHandAnchor").gameObject;
 
+            var tempMasterClientVectorToRightHand = tempMasterClientRightHand.transform.position - tempMasterClientCenterEyeAnchor.transform.position;
+            var tempMasterClientRotationalAngle = Vector3.Angle(tempMasterClientVectorToRightHand, tempMasterClientLeftHand.transform.position - tempMasterClientRightHand.transform.position);
+
+            Debug.Log("Master client " + gameObject.GetPhotonView().ViewID + " vector to right hand: " + tempMasterClientVectorToRightHand);
+            Debug.Log("Master client " + gameObject.GetPhotonView().ViewID + " distance to right hand: " + tempMasterClientVectorToRightHand.magnitude);
+            Debug.Log("Master client " + gameObject.GetPhotonView().ViewID + " rotation angle respect to hands: " + tempMasterClientRotationalAngle);
+    }
+
+    public int GetIdOfPlayerToBePositioned()
+    {
+        return _idOfPlayerToBePositioned;
     }
 }

@@ -21,10 +21,11 @@ public class GestureDetector : MonoBehaviour, XRIDefaultInputActions.IGestureDet
     public float threshold = 0.1f;
     public bool debugMode = true;
     public List<Gesture> gestures;
-    private bool _fingersReady = false;
+    private bool _fingersReady;
     private OVRSkeleton _skeleton;
     private List<OVRBone> _fingerBones;
     private Gesture _previousGesture;
+    private CoLocationSynchronizer _coLocationSynchronizer;
 
     // Start is called before the first frame update
     void Start()
@@ -32,6 +33,7 @@ public class GestureDetector : MonoBehaviour, XRIDefaultInputActions.IGestureDet
         _skeleton = GameObject.Find("OVRRightHandPrefab").GetComponent<OVRSkeleton>();
         _defaultInputActions = new XRIDefaultInputActions();
         _previousGesture = new Gesture();
+        _coLocationSynchronizer = gameObject.GetComponent<CoLocationSynchronizer>();
         
         StartCoroutine(DelayInitBones());
 
@@ -44,12 +46,12 @@ public class GestureDetector : MonoBehaviour, XRIDefaultInputActions.IGestureDet
 
     public void Update()
     {
-        if (_fingersReady)
+        if (_fingersReady && _coLocationSynchronizer.GetIdOfPlayerToBePositioned() != 0)
         {
             Gesture currentGesture = Recognize();
 
             bool hasRecognized = !currentGesture.Equals(new Gesture());
-
+            
             //Check if new gesture
             if (hasRecognized && !currentGesture.Equals(_previousGesture))
             {
@@ -58,6 +60,7 @@ public class GestureDetector : MonoBehaviour, XRIDefaultInputActions.IGestureDet
                 
                 if(currentGesture.onRecognized != null)
                     currentGesture.onRecognized.Invoke();
+                
             }
         }
     }
