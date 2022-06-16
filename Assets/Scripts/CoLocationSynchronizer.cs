@@ -9,7 +9,8 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
     private XRIDefaultInputActions _defaultInputActions;
 
     private const byte SendIDForSync = 1;
-    private const byte SendPositionForCoLocation = 2;
+    private const byte SendInitialPositionForCoLocation = 2;
+    private const byte SendFinalPositionForCoLocation = 3;
     private int _idOfPlayerToBePositioned;
     private const int MasterClientViewId = 1001;
     private GameObject _ovrCameraRig;
@@ -48,7 +49,7 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
         }
 
         //Event triggered by bunny hand gesture: received the position of the player who wants to be positioned
-        if (photonEvent.Code == SendPositionForCoLocation && gameObject.GetPhotonView().IsMine)
+        if (photonEvent.Code == SendInitialPositionForCoLocation && gameObject.GetPhotonView().IsMine)
         {
             Debug.Log("Master Client " + gameObject.GetPhotonView().ViewID + " received position from client " + _idOfPlayerToBePositioned);
             object[] data = (object[]) photonEvent.CustomData;
@@ -70,9 +71,21 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
             Debug.Log("Master client " + gameObject.GetPhotonView().ViewID + " vector to right hand: " + tempMasterClientVectorToRightHand);
             Debug.Log("Master client " + gameObject.GetPhotonView().ViewID + " distance to right hand: " + tempMasterClientVectorToRightHand.magnitude);
             Debug.Log("Master client " + gameObject.GetPhotonView().ViewID + " rotation angle respect to hands: " + tempMasterClientRotationalAngle);
-            
+
             //CALCULATIONS FOR FINAL POSITION
+            var tempFinalPosition = tempMasterClientVectorToRightHand + tempPlayerToPositionVectorToRightHand;
             
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.Others};
+            PhotonNetwork.RaiseEvent(SendFinalPositionForCoLocation, tempFinalPosition, raiseEventOptions, SendOptions.SendReliable);
+        }
+
+        if (photonEvent.Code == SendFinalPositionForCoLocation && gameObject.GetPhotonView().IsMine && gameObject.GetPhotonView().ViewID == _idOfPlayerToBePositioned)
+        {
+            Vector3 finalPosition = (Vector3) photonEvent.CustomData;
+            Debug.Log(_idOfPlayerToBePositioned + " received final position " + finalPosition);
+            transform.Find("OVRCameraRig(Clone)").transform.position = finalPosition;
+            
+            // _idOfPlayerToBePositioned = 0;
         }
     }
 
@@ -104,7 +117,7 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
             object[] posInfoToSend = {tempVectorToRightHand, tempRotationalAngle};
             
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.MasterClient};
-            PhotonNetwork.RaiseEvent(SendPositionForCoLocation, posInfoToSend, raiseEventOptions, SendOptions.SendReliable);
+            PhotonNetwork.RaiseEvent(SendInitialPositionForCoLocation, posInfoToSend, raiseEventOptions, SendOptions.SendReliable);
         }
     }
     public int GetIdOfPlayerToBePositioned()
