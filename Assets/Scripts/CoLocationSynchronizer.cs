@@ -3,6 +3,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.PlayerLoop;
 
 public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInputActions.ISynchronizeActions
 {
@@ -11,6 +12,7 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
     private const byte SendIDForSync = 1;
     private const byte SendInitialPositionForCoLocation = 2;
     private const byte SendFinalPositionForCoLocation = 3;
+    private const byte ResetID = 4;
     private int _idOfPlayerToBePositioned;
     private const int MasterClientViewId = 1001;
     private GameObject _ovrCameraRig;
@@ -72,20 +74,29 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
             Debug.Log("Master client " + gameObject.GetPhotonView().ViewID + " distance to right hand: " + tempMasterClientVectorToRightHand.magnitude);
             Debug.Log("Master client " + gameObject.GetPhotonView().ViewID + " rotation angle respect to hands: " + tempMasterClientRotationalAngle);
 
-            //CALCULATIONS FOR FINAL POSITION
-            var tempFinalPosition = tempMasterClientVectorToRightHand + tempPlayerToPositionVectorToRightHand;
-            
+            //CALCULATING FINAL POSITION
+            var tempFinalPosition = tempMasterClientCenterEyeAnchor.transform.position + (tempMasterClientVectorToRightHand - tempPlayerToPositionVectorToRightHand);
+            tempFinalPosition.y = 0;
+
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.Others};
             PhotonNetwork.RaiseEvent(SendFinalPositionForCoLocation, tempFinalPosition, raiseEventOptions, SendOptions.SendReliable);
         }
 
+        //Event triggered at the end of the above event: sending final position to player 2 who repositions himself
         if (photonEvent.Code == SendFinalPositionForCoLocation && gameObject.GetPhotonView().IsMine && gameObject.GetPhotonView().ViewID == _idOfPlayerToBePositioned)
         {
             Vector3 finalPosition = (Vector3) photonEvent.CustomData;
-            Debug.Log(_idOfPlayerToBePositioned + " received final position " + finalPosition);
-            transform.Find("OVRCameraRig(Clone)").transform.position = finalPosition;
+            transform.Find("OVRCameraRig(Clone)").transform.position = new Vector3(finalPosition.x, finalPosition.y, finalPosition.z);
             
-            // _idOfPlayerToBePositioned = 0;
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.All};
+            _idOfPlayerToBePositioned = 0;
+            PhotonNetwork.RaiseEvent(ResetID, 0, raiseEventOptions, SendOptions.SendReliable);
+        }
+        
+        //Event triggered at the end of above event: sets 0 to _idOfPlayerToBePositioned on the instances of ALL the players
+        if (photonEvent.Code == ResetID)
+        {
+            _idOfPlayerToBePositioned = (int) photonEvent.CustomData;
         }
     }
 

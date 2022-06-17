@@ -20,9 +20,6 @@ public class NetworkPlayer : MonoBehaviour
             myRig.transform.parent = transform;
 
             _centerEyeAnchor = transform.Find("OVRCameraRig(Clone)").Find("TrackingSpace").Find("CenterEyeAnchor").gameObject;
-
-            if (!PhotonNetwork.IsMasterClient)
-                myRig.transform.position = new Vector3(5, 0, 5);
         }
     }
 
