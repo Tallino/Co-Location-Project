@@ -56,27 +56,27 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
             Debug.Log("Master Client " + gameObject.GetPhotonView().ViewID + " received position from client " + _idOfPlayerToBePositioned);
             object[] data = (object[]) photonEvent.CustomData;
             
-            var tempPlayerToPositionVectorToRightHand = (Vector3)data[0];
+            var tempPlayerToPositionVectorToMeanPoint = (Vector3)data[0];
             var tempPlayerToPositionRotationalAngle = (float)data[1];
             
-            Debug.Log("Received " + _idOfPlayerToBePositioned + " vector to right hand: " + tempPlayerToPositionVectorToRightHand);
-            Debug.Log("Received " + _idOfPlayerToBePositioned + " distance to right hand: " + tempPlayerToPositionVectorToRightHand.magnitude);
+            Debug.Log("Received " + _idOfPlayerToBePositioned + " vector to reference mean point: " + tempPlayerToPositionVectorToMeanPoint);
             Debug.Log("Received " + _idOfPlayerToBePositioned + " rotation angle respect to hands: " + tempPlayerToPositionRotationalAngle);
             
             var tempMasterClientCenterEyeAnchor = transform.Find("OVRCameraRig(Clone)").Find("TrackingSpace").Find("CenterEyeAnchor").gameObject;
             var tempMasterClientRightHand = transform.Find("OVRCameraRig(Clone)").Find("TrackingSpace").Find("RightHandAnchor").gameObject;
             var tempMasterClientLeftHand = transform.Find("OVRCameraRig(Clone)").Find("TrackingSpace").Find("LeftHandAnchor").gameObject;
+            
+            var tempMasterClientMeanPoint = tempMasterClientRightHand.transform.position + (tempMasterClientLeftHand.transform.position - tempMasterClientRightHand.transform.position) / 2;
+            var tempMasterClientVectorToMeanPoint = tempMasterClientMeanPoint - tempMasterClientCenterEyeAnchor.transform.position;
+            var tempMasterClientRotationalAngle = Vector3.Angle(tempMasterClientVectorToMeanPoint, tempMasterClientLeftHand.transform.position - tempMasterClientVectorToMeanPoint);
 
-            var tempMasterClientVectorToRightHand = tempMasterClientRightHand.transform.position - tempMasterClientCenterEyeAnchor.transform.position;
-            var tempMasterClientRotationalAngle = Vector3.Angle(tempMasterClientVectorToRightHand, tempMasterClientLeftHand.transform.position - tempMasterClientRightHand.transform.position);
-
-            Debug.Log("Master client " + gameObject.GetPhotonView().ViewID + " vector to right hand: " + tempMasterClientVectorToRightHand);
-            Debug.Log("Master client " + gameObject.GetPhotonView().ViewID + " distance to right hand: " + tempMasterClientVectorToRightHand.magnitude);
+            Debug.Log("Master client " + gameObject.GetPhotonView().ViewID + " vector to reference mean point: " + tempMasterClientVectorToMeanPoint);
             Debug.Log("Master client " + gameObject.GetPhotonView().ViewID + " rotation angle respect to hands: " + tempMasterClientRotationalAngle);
 
             //CALCULATING FINAL POSITION
-            var tempFinalPosition = tempMasterClientCenterEyeAnchor.transform.position + (tempMasterClientVectorToRightHand - tempPlayerToPositionVectorToRightHand);
+            var tempFinalPosition = tempMasterClientCenterEyeAnchor.transform.position + (tempMasterClientVectorToMeanPoint - tempPlayerToPositionVectorToMeanPoint);
             tempFinalPosition.y = 0;
+            Debug.Log("FINAL POSITION IS: " + tempFinalPosition);
 
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.Others};
             PhotonNetwork.RaiseEvent(SendFinalPositionForCoLocation, tempFinalPosition, raiseEventOptions, SendOptions.SendReliable);
@@ -86,7 +86,7 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
         if (photonEvent.Code == SendFinalPositionForCoLocation && gameObject.GetPhotonView().IsMine && gameObject.GetPhotonView().ViewID == _idOfPlayerToBePositioned)
         {
             Vector3 finalPosition = (Vector3) photonEvent.CustomData;
-            transform.Find("OVRCameraRig(Clone)").transform.position = new Vector3(finalPosition.x, finalPosition.y, finalPosition.z);
+            transform.Find("OVRCameraRig(Clone)").transform.position = finalPosition;
             
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.All};
             _idOfPlayerToBePositioned = 0;
@@ -121,11 +121,12 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
             var tempCenterEyeAnchor = transform.Find("OVRCameraRig(Clone)").Find("TrackingSpace").Find("CenterEyeAnchor").gameObject;
             var tempRightHand = transform.Find("OVRCameraRig(Clone)").Find("TrackingSpace").Find("RightHandAnchor").gameObject;
             var tempLeftHand = transform.Find("OVRCameraRig(Clone)").Find("TrackingSpace").Find("LeftHandAnchor").gameObject;
+            
+            var refMeanPoint = tempRightHand.transform.position + (tempLeftHand.transform.position - tempRightHand.transform.position) / 2;
+            var tempVectorToMeanPoint = refMeanPoint - tempCenterEyeAnchor.transform.position;
+            var tempRotationalAngle = Vector3.Angle(tempVectorToMeanPoint, tempLeftHand.transform.position - tempVectorToMeanPoint);
 
-            var tempVectorToRightHand = tempRightHand.transform.position - tempCenterEyeAnchor.transform.position;
-            var tempRotationalAngle = Vector3.Angle(tempVectorToRightHand, tempLeftHand.transform.position - tempRightHand.transform.position);
-
-            object[] posInfoToSend = {tempVectorToRightHand, tempRotationalAngle};
+            object[] posInfoToSend = {tempVectorToMeanPoint, tempRotationalAngle};
             
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.MasterClient};
             PhotonNetwork.RaiseEvent(SendInitialPositionForCoLocation, posInfoToSend, raiseEventOptions, SendOptions.SendReliable);

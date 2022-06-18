@@ -30,5 +30,8 @@ public class NetworkPlayer : MonoBehaviour
             head.position = _centerEyeAnchor.transform.position;
             head.rotation = _centerEyeAnchor.transform.rotation;
         }
+        
+        Debug.Log(gameObject.transform.position);
+            
     }
 }
