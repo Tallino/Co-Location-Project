@@ -77,7 +77,7 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
             var tempFinalPosition = tempMasterClientCenterEyeAnchor.transform.position + (tempMasterClientVectorToMeanPoint - tempPlayerToPositionVectorToMeanPoint);
             tempFinalPosition.y = 0;
             Debug.Log("FINAL POSITION IS: " + tempFinalPosition);
-
+            
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.Others};
             PhotonNetwork.RaiseEvent(SendFinalPositionForCoLocation, tempFinalPosition, raiseEventOptions, SendOptions.SendReliable);
         }
@@ -86,11 +86,22 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
         if (photonEvent.Code == SendFinalPositionForCoLocation && gameObject.GetPhotonView().IsMine && gameObject.GetPhotonView().ViewID == _idOfPlayerToBePositioned)
         {
             Vector3 finalPosition = (Vector3) photonEvent.CustomData;
-            transform.Find("OVRCameraRig(Clone)").transform.position = finalPosition;
+
+            transform.Find("OVRCameraRig(Clone)").gameObject.transform.position = finalPosition;
             
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.MasterClient};
+            PhotonNetwork.RaiseEvent(10, transform.Find("OVRCameraRig(Clone)").gameObject.transform.position, raiseEventOptions, SendOptions.SendReliable);
+            
+            /*
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.All};
             _idOfPlayerToBePositioned = 0;
             PhotonNetwork.RaiseEvent(ResetID, 0, raiseEventOptions, SendOptions.SendReliable);
+            */
+        }
+
+        if (photonEvent.Code == 10)
+        {
+            Debug.Log("POSITION OF PLAYER 2 IN WORLD COORDINATES: " + (Vector3) photonEvent.CustomData);
         }
         
         //Event triggered at the end of above event: sets 0 to _idOfPlayerToBePositioned on the instances of ALL the players
