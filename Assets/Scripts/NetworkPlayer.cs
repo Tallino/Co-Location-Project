@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Photon.Pun;
 
@@ -18,7 +19,7 @@ public class NetworkPlayer : MonoBehaviour
             rightEye.GetComponent<MeshRenderer>().enabled = false;
             GameObject myRig = Instantiate(rig, transform.position, transform.rotation);
             myRig.transform.parent = transform;
-
+            
             _centerEyeAnchor = transform.Find("OVRCameraRig(Clone)").Find("TrackingSpace").Find("CenterEyeAnchor").gameObject;
         }
     }
@@ -30,5 +31,11 @@ public class NetworkPlayer : MonoBehaviour
             head.position = _centerEyeAnchor.transform.position;
             head.rotation = _centerEyeAnchor.transform.rotation;
         }
+    }
+
+    private void OnGUI()
+    {
+        if(gameObject.GetPhotonView().IsMine)
+            GUILayout.Label("My position is: " + _centerEyeAnchor.transform.position);
     }
 }
