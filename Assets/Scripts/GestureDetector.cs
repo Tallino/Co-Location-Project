@@ -54,7 +54,7 @@ public class GestureDetector : MonoBehaviour, XRIDefaultInputActions.IGestureDet
             
             //Check if new gesture
             if (hasRecognized && !currentGesture.Equals(_previousGesture))
-            {
+            { 
                 Debug.Log("New Gesture Found: " + currentGesture.name);
                 _previousGesture = currentGesture;
                 

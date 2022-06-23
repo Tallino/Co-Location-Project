@@ -1,6 +1,8 @@
+using System;
 using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.PlayerLoop;
@@ -16,6 +18,8 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
     private int _idOfPlayerToBePositioned;
     private const int MasterClientViewId = 1001;
     private GameObject _ovrCameraRig;
+    [SerializeField] 
+    private TextMeshProUGUI text;
 
     public void Start()
     {
@@ -60,13 +64,15 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
             var playerToPositionMeanPointRotation = (Quaternion)data[1];
             
             Debug.Log("Received " + _idOfPlayerToBePositioned + " mean point position: " + playerToPositionMeanPointPosition);
-            
-            var masterClientRightHand = transform.Find("OVRCameraRig(Clone)").Find("TrackingSpace").Find("RightHandAnchor").gameObject;
-            var masterClientLeftHand = transform.Find("OVRCameraRig(Clone)").Find("TrackingSpace").Find("LeftHandAnchor").gameObject;
+
+            var masterClientRightHand = GameObject.Find("RightHandAnchor");
+            var masterClientLeftHand = GameObject.Find("LeftHandAnchor");
             
             var masterClientMeanPointPosition = Vector3.Lerp(masterClientLeftHand.transform.position, masterClientRightHand.transform.position, 0.5f);
             var masterClientMeanPointRotation = Quaternion.Lerp(masterClientLeftHand.transform.rotation, masterClientRightHand.transform.rotation, 0.5f);
-            
+            masterClientMeanPointRotation.x = 0;
+            masterClientMeanPointRotation.z = 0;
+
             Debug.Log("Master client " + gameObject.GetPhotonView().ViewID + " mean point position: " + masterClientMeanPointPosition);
             
             //CALCULATING FINAL POSITION
@@ -93,22 +99,14 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
             var finalDeltaPosition = (Vector3)data[0];
             var finalDeltaRotation = (Quaternion)data[1];
 
-            transform.Find("OVRCameraRig(Clone)").gameObject.transform.position = transform.Find("OVRCameraRig(Clone)").gameObject.transform.position + finalDeltaPosition;
-            transform.Find("OVRCameraRig(Clone)").gameObject.transform.rotation = transform.Find("OVRCameraRig(Clone)").gameObject.transform.rotation * finalDeltaRotation;
-            
-            RaiseEventOptions raiseEventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.MasterClient};
-            PhotonNetwork.RaiseEvent(10, transform.Find("OVRCameraRig(Clone)").gameObject.transform.position, raiseEventOptions, SendOptions.SendReliable);
-            
+            GameObject.Find("OVRCameraRig").transform.position += finalDeltaPosition;
+            GameObject.Find("OVRCameraRig").transform.rotation *= finalDeltaRotation;
+
             /*
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.All};
             _idOfPlayerToBePositioned = 0;
             PhotonNetwork.RaiseEvent(ResetID, 0, raiseEventOptions, SendOptions.SendReliable);
             */
-        }
-
-        if (photonEvent.Code == 10)
-        {
-            Debug.Log("POSITION OF PLAYER 2 IN WORLD COORDINATES: " + (Vector3) photonEvent.CustomData);
         }
         
         //Event triggered at the end of above event: sets 0 to _idOfPlayerToBePositioned on the instances of ALL the players
@@ -129,6 +127,7 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
     // Function triggered with hand gesture
     public void CoLocate()
     {
+
         if(_idOfPlayerToBePositioned == 0)
             return;
         
@@ -136,11 +135,13 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
         
         if (gameObject.GetPhotonView().IsMine && gameObject.GetPhotonView().ViewID == _idOfPlayerToBePositioned)
         {
-            var tempRightHand = transform.Find("OVRCameraRig(Clone)").Find("TrackingSpace").Find("RightHandAnchor").gameObject;
-            var tempLeftHand = transform.Find("OVRCameraRig(Clone)").Find("TrackingSpace").Find("LeftHandAnchor").gameObject;
-
+            var tempRightHand = GameObject.Find("RightHandAnchor");
+            var tempLeftHand = GameObject.Find("LeftHandAnchor");
+            
             var refMeanPointPosition = Vector3.Lerp(tempLeftHand.transform.position, tempRightHand.transform.position, 0.5f);
             var refMeanPointRotation = Quaternion.Lerp(tempLeftHand.transform.rotation, tempRightHand.transform.rotation, 0.5f);
+            refMeanPointRotation.x = 0;
+            refMeanPointRotation.z = 0;
 
             object[] posInfoToSend = {refMeanPointPosition, refMeanPointRotation};
             
@@ -151,5 +152,14 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
     public int GetIdOfPlayerToBePositioned()
     {
         return _idOfPlayerToBePositioned;
+    }
+
+
+    private void Update()
+    {
+        if (gameObject.GetPhotonView().IsMine)
+        {
+            text.text = " " + GameObject.Find("OVRCameraRig").transform.position;
+        }
     }
 }
