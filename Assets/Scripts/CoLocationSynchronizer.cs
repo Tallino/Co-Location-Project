@@ -15,7 +15,6 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
     private const byte ResetID = 4;
     private int _idOfPlayerToBePositioned;
     private const int MasterClientViewId = 1001;
-    private GameObject _ovrCameraRig;
 
     public void Start()
     {
@@ -56,17 +55,25 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
             var data = (object[]) photonEvent.CustomData;
    
             var otherRightHandPosition = (Vector3)data[0];
-            var otherRightHandRotation = (Quaternion)data[1];
-            
-            var myRightHandRotation = GameObject.Find("RightHandAnchor").gameObject.transform.rotation;
-            var myRightHandPosition = GameObject.Find("RightHandAnchor").gameObject.transform.position;
+            var otherVectorToRightHand = (Vector3)data[1];
 
-            var deltaPosition = otherRightHandPosition - myRightHandPosition;
+            var myRightHand = GameObject.Find("RightHandAnchor");
+            var myVectorToRightHand = myRightHand.transform.position - GameObject.Find("CenterEyeAnchor").transform.position;
+
+            var deltaRotation = Vector3.Angle(otherVectorToRightHand, myVectorToRightHand);
+            
+            var deltaPosition = otherRightHandPosition - myRightHand.transform.position;
             deltaPosition.y = 0;
 
-            GameObject.Find("OVRCameraRig").gameObject.transform.RotateAround(GameObject.Find("CenterEyeAnchor").gameObject.transform.position, Vector3.up, otherRightHandRotation.eulerAngles.y - myRightHandRotation.eulerAngles.y);
+            GameObject.Find("OVRCameraRig").gameObject.transform.RotateAround(GameObject.Find("CenterEyeAnchor").gameObject.transform.position, Vector3.up, deltaRotation);
             // gameObject.transform.position += deltaPosition;
+            
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.Others};
+            PhotonNetwork.RaiseEvent(10, deltaRotation, raiseEventOptions, SendOptions.SendReliable);
         }
+        
+        if (photonEvent.Code == 10 && gameObject.GetPhotonView().IsMine)
+            Debug.Log((float)photonEvent.CustomData);
     }
 
     public void OnSendData(InputAction.CallbackContext context)
@@ -88,8 +95,9 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
         if (gameObject.GetPhotonView().IsMine && gameObject.GetPhotonView().ViewID == MasterClientViewId)
         {
             var tempRightHand = GameObject.Find("RightHandAnchor");
-            
-            object[] posInfoToSend = {tempRightHand.transform.position, tempRightHand.transform.rotation};
+            var vectorToRightHand = tempRightHand.transform.position - GameObject.Find("CenterEyeAnchor").transform.position;
+                                    
+            object[] posInfoToSend = {tempRightHand.transform.position, vectorToRightHand};
 
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.Others};
             PhotonNetwork.RaiseEvent(SendInitialPositionForCoLocation, posInfoToSend, raiseEventOptions, SendOptions.SendReliable);
