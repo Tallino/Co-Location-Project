@@ -4,9 +4,6 @@ using Photon.Realtime;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
-    [SerializeField]
-    private Transform _centerEyeAnchor;
-    
     private GameObject _spawnedPlayerPrefab;
     
     // Start is called before the first frame update
@@ -39,9 +36,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("I am connected to the room");
         base.OnJoinedRoom();
-        _spawnedPlayerPrefab = PhotonNetwork.Instantiate("Network Player", _centerEyeAnchor.position, _centerEyeAnchor.rotation);
-        if (_spawnedPlayerPrefab.GetPhotonView().IsMine)
-            _spawnedPlayerPrefab.transform.parent = _centerEyeAnchor;
+        _spawnedPlayerPrefab = PhotonNetwork.Instantiate("Network Player", transform.position, transform.rotation);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
