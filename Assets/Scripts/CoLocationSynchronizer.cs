@@ -58,13 +58,13 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
             var otherRightHandPosition = (Vector3)data[0];
             var otherRightHandRotation = (Quaternion)data[1];
             
-            var myRightHandRotation = transform.Find("OVRCameraRig(Clone)").Find("TrackingSpace").Find("RightHandAnchor").gameObject.transform.rotation;
-            var myRightHandPosition = transform.Find("OVRCameraRig(Clone)").Find("TrackingSpace").Find("RightHandAnchor").gameObject.transform.position;
+            var myRightHandRotation = GameObject.Find("RightHandAnchor").gameObject.transform.rotation;
+            var myRightHandPosition = GameObject.Find("RightHandAnchor").gameObject.transform.position;
 
             var deltaPosition = otherRightHandPosition - myRightHandPosition;
             deltaPosition.y = 0;
 
-            gameObject.transform.RotateAround(transform.Find("OVRCameraRig(Clone)").Find("TrackingSpace").Find("CenterEyeAnchor").gameObject.transform.position, Vector3.up, otherRightHandRotation.eulerAngles.y - myRightHandRotation.eulerAngles.y);
+            GameObject.Find("OVRCameraRig").gameObject.transform.RotateAround(GameObject.Find("CenterEyeAnchor").gameObject.transform.position, Vector3.up, otherRightHandRotation.eulerAngles.y - myRightHandRotation.eulerAngles.y);
             // gameObject.transform.position += deltaPosition;
         }
     }
@@ -87,7 +87,7 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
 
         if (gameObject.GetPhotonView().IsMine && gameObject.GetPhotonView().ViewID == MasterClientViewId)
         {
-            var tempRightHand = transform.Find("OVRCameraRig(Clone)").Find("TrackingSpace").Find("RightHandAnchor").gameObject;
+            var tempRightHand = GameObject.Find("RightHandAnchor");
             
             object[] posInfoToSend = {tempRightHand.transform.position, tempRightHand.transform.rotation};
 

@@ -590,7 +590,6 @@ MonoBehaviour:
   leftEye: {fileID: 3505586552696250241}
   rightEye: {fileID: 7325510217710401751}
   head: {fileID: 4730476022118040602}
-  rig: {fileID: 8599583114158887285, guid: 59bd4e2048636cc4d849ea0786227f21, type: 3}
 --- !u!114 &337852349553283379
 MonoBehaviour:
   m_ObjectHideFlags: 0
