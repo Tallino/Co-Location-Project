@@ -54,26 +54,48 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
         {
             var data = (object[]) photonEvent.CustomData;
    
-            var otherRightHandPosition = (Vector3)data[0];
-            var otherVectorToRightHand = (Vector3)data[1];
-
+            var otherMeanHandPosition = (Vector3)data[0];
+            var otherMeanHandRotation = (Quaternion)data[1];
+            var otherHeadForward = (Vector3)data[2];
+            
             var myRightHand = GameObject.Find("RightHandAnchor");
-            var myVectorToRightHand = myRightHand.transform.position - GameObject.Find("CenterEyeAnchor").transform.position;
-
-            var deltaRotation = Vector3.Angle(otherVectorToRightHand, myVectorToRightHand);
+            var myLeftHand = GameObject.Find("LeftHandAnchor");
             
-            var deltaPosition = otherRightHandPosition - myRightHand.transform.position;
+            var myMeanHandPosition = Vector3.Lerp(myLeftHand.transform.position, myRightHand.transform.position, 0.5f);
+            var myMeanHandRotation = Quaternion.Lerp(myLeftHand.transform.rotation, myRightHand.transform.rotation, 0.5f);
+
+            var deltaRotation = otherMeanHandRotation.eulerAngles.y - myMeanHandRotation.eulerAngles.y;
+
+            var deltaPosition = otherMeanHandPosition - myMeanHandPosition;
             deltaPosition.y = 0;
-
-            GameObject.Find("OVRCameraRig").gameObject.transform.RotateAround(GameObject.Find("CenterEyeAnchor").gameObject.transform.position, Vector3.up, deltaRotation);
-            // gameObject.transform.position += deltaPosition;
             
-            RaiseEventOptions raiseEventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.Others};
-            PhotonNetwork.RaiseEvent(10, deltaRotation, raiseEventOptions, SendOptions.SendReliable);
+            GameObject.Find("OVRCameraRig").gameObject.transform.RotateAround(myMeanHandPosition, Vector3.up, deltaRotation);
+            var myHeadForward = gameObject.GetComponent<NetworkPlayer>().head.forward;
+            
+            /* if(Vector3.Dot(myHeadForward, otherHeadForward) > 0)
+                GameObject.Find("OVRCameraRig").gameObject.transform.RotateAround(myMeanHandPosition, Vector3.up, 180);
+                */
+                
+            //GameObject.Find("OVRCameraRig").gameObject.transform.position += deltaPosition;
+            
+            
+            object[] INFO = {myMeanHandRotation, deltaRotation};
+            
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.MasterClient};
+            PhotonNetwork.RaiseEvent(10, INFO, raiseEventOptions, SendOptions.SendReliable);
         }
-        
-        if (photonEvent.Code == 10 && gameObject.GetPhotonView().IsMine)
-            Debug.Log((float)photonEvent.CustomData);
+
+        if (photonEvent.Code == 10 && gameObject.GetPhotonView().IsMine && gameObject.GetPhotonView().ViewID == MasterClientViewId)
+        {
+            var data = (object[]) photonEvent.CustomData;
+
+            var otherMeanHandRotation = (Quaternion)data[0];
+            var deltaRotation = (float)data[1];
+            
+            Debug.Log("OTHER MEAN ROTATION WAS: " + otherMeanHandRotation.eulerAngles.y);
+            Debug.Log("PLAYER MUST ROTATE OF: " + deltaRotation);
+            
+        }
     }
 
     public void OnSendData(InputAction.CallbackContext context)
@@ -95,9 +117,14 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
         if (gameObject.GetPhotonView().IsMine && gameObject.GetPhotonView().ViewID == MasterClientViewId)
         {
             var tempRightHand = GameObject.Find("RightHandAnchor");
-            var vectorToRightHand = tempRightHand.transform.position - GameObject.Find("CenterEyeAnchor").transform.position;
-                                    
-            object[] posInfoToSend = {tempRightHand.transform.position, vectorToRightHand};
+            var tempLeftHand = GameObject.Find("LeftHandAnchor");
+
+            var meanHandPosition = Vector3.Lerp(tempLeftHand.transform.position, tempRightHand.transform.position, 0.5f);
+            var meanHandRotation = Quaternion.Lerp(tempLeftHand.transform.rotation, tempRightHand.transform.rotation, 0.5f);
+            
+            Debug.Log("MY MEAN ROTATION IS: " + meanHandRotation.eulerAngles.y);
+            
+            object[] posInfoToSend = {meanHandPosition, meanHandRotation, gameObject.GetComponent<NetworkPlayer>().head.forward};
 
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.Others};
             PhotonNetwork.RaiseEvent(SendInitialPositionForCoLocation, posInfoToSend, raiseEventOptions, SendOptions.SendReliable);
