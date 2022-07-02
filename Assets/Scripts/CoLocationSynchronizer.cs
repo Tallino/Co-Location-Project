@@ -60,8 +60,8 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
             deltaPosition.y = 0;
             
             GameObject.Find("OVRCameraRig").gameObject.transform.RotateAround(myMeanHandPosition, Vector3.up, deltaRotation);
-            var myHeadForward = gameObject.GetComponent<NetworkPlayer>().head.forward;
-            
+            var myHeadForward = Vector3.ProjectOnPlane(gameObject.GetComponent<NetworkPlayer>().head.forward, Vector3.up);
+
             if(Vector3.Dot(myHeadForward, otherHeadForward) > 0)
                 GameObject.Find("OVRCameraRig").gameObject.transform.RotateAround(myMeanHandPosition, Vector3.up, 180);
 
@@ -106,7 +106,7 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
             
             Debug.Log("MY MEAN ROTATION IS: " + meanHandRotation.eulerAngles.y);
             
-            object[] posInfoToSend = {meanHandPosition, meanHandRotation, gameObject.GetComponent<NetworkPlayer>().head.forward};
+            object[] posInfoToSend = {meanHandPosition, meanHandRotation, Vector3.ProjectOnPlane(gameObject.GetComponent<NetworkPlayer>().head.forward, Vector3.up)};
 
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.Others};
             PhotonNetwork.RaiseEvent(SendPositionForCoLocation, posInfoToSend, raiseEventOptions, SendOptions.SendReliable);
