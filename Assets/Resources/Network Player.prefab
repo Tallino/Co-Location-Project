@@ -344,8 +344,7 @@ MonoBehaviour:
   threshold: 0.05
   debugMode: 1
   gestures:
-  - name: Bunny
-    fingerDatas:
+  - fingerDatas:
     - {x: 0, y: 0, z: 0}
     - {x: 0, y: 0, z: 0}
     - {x: -0.020068992, y: -0.011553996, z: -0.010496998}
