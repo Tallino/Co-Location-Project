@@ -9,7 +9,6 @@ using UnityEngine.InputSystem;
 [Serializable]
 public struct Gesture
 {
-    public string name;
     public List<Vector3> fingerDatas;
     public UnityEvent onRecognized;
 }
@@ -24,7 +23,6 @@ public class GestureDetector : MonoBehaviour, XRIDefaultInputActions.IGestureDet
     private bool _fingersReady;
     private OVRSkeleton _skeleton;
     private List<OVRBone> _fingerBones;
-    private Gesture _previousGesture;
     private CoLocationSynchronizer _coLocationSynchronizer;
 
     // Start is called before the first frame update
@@ -32,7 +30,6 @@ public class GestureDetector : MonoBehaviour, XRIDefaultInputActions.IGestureDet
     {
         _skeleton = GameObject.Find("OVRRightHandPrefab").GetComponent<OVRSkeleton>();
         _defaultInputActions = new XRIDefaultInputActions();
-        _previousGesture = new Gesture();
         _coLocationSynchronizer = gameObject.GetComponent<CoLocationSynchronizer>();
         
         StartCoroutine(DelayInitBones());
@@ -69,7 +66,6 @@ public class GestureDetector : MonoBehaviour, XRIDefaultInputActions.IGestureDet
     void Save()
     {
         Gesture g = new Gesture();
-        g.name = "New Gesture";
         List<Vector3> data = new List<Vector3>();
 
         foreach (var bone in _fingerBones)

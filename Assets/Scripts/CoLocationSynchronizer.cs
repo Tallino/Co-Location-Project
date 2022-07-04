@@ -59,7 +59,7 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
             var deltaPosition = otherMeanHandPosition - myMeanHandPosition;
             deltaPosition.y = 0;
             
-            GameObject.Find("OVRCameraRig").gameObject.transform.RotateAround(myMeanHandPosition, Vector3.up, deltaRotation);
+            GameObject.Find("OVRCameraRig").gameObject.transform.RotateAround(myMeanHandPosition, Vector3.up, 180 + deltaRotation);
             var myHeadForward = Vector3.ProjectOnPlane(gameObject.GetComponent<NetworkPlayer>().head.forward, Vector3.up);
 
             if(Vector3.Dot(myHeadForward, otherHeadForward) > 0)
