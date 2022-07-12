@@ -10,6 +10,7 @@ public class NetworkPlayer : MonoBehaviour
     public GameObject rightHand;
     public GameObject meanHand;
     public Transform head;
+    public MeshRenderer playerStateCapsule;
     private GameObject _centerEyeAnchor;
     private GameObject _leftHandAnchor;
     private GameObject _rightHandAnchor;
@@ -45,6 +46,25 @@ public class NetworkPlayer : MonoBehaviour
 
             meanHand.transform.position = Vector3.Lerp(leftHand.transform.position, rightHand.transform.position, 0.5f);
             meanHand.transform.rotation = Quaternion.Lerp(leftHand.transform.rotation, rightHand.transform.rotation, 0.5f);
+            
+            if (PhotonNetwork.IsMasterClient)
+                gameObject.GetPhotonView().RPC("SetColor", RpcTarget.AllBuffered, 1);
+            else if (gameObject.GetPhotonView().ViewID == gameObject.GetComponent<CoLocationSynchronizer>().GetIdOfPlayerToBePositioned()) 
+                gameObject.GetPhotonView().RPC("SetColor", RpcTarget.AllBuffered, 2);
+            else
+                gameObject.GetPhotonView().RPC("SetColor", RpcTarget.AllBuffered, 3);
+            
         }
+    }
+
+    [PunRPC]
+    private void SetColor(int colorId)
+    {
+        if(colorId == 1)
+            playerStateCapsule.material.color = Color.red;
+        else if (colorId == 2)
+            playerStateCapsule.material.color = Color.blue;
+        else
+            playerStateCapsule.material.color = Color.gray;
     }
 }

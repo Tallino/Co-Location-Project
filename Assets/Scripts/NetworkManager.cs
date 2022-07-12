@@ -50,5 +50,5 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         base.OnLeftRoom();
         PhotonNetwork.Destroy(_spawnedPlayerPrefab);
     }
-    
+
 }
