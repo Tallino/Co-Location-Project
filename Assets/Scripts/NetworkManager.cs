@@ -51,4 +51,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.Destroy(_spawnedPlayerPrefab);
     }
 
+    public override void OnMasterClientSwitched(Player newMasterClient)
+    {
+        base.OnMasterClientSwitched(newMasterClient);
+        
+        var photonViews = FindObjectsOfType<PhotonView>();
+        
+        foreach (var view in photonViews)
+            if(view.Owner.IsMasterClient)
+                view.gameObject.GetComponent<NetworkPlayer>().SetStateHasChanged(true);
+    }
 }

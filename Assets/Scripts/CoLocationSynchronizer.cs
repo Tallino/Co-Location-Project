@@ -34,7 +34,7 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
         //Event triggered by grip button: received the id of the player who wants to be positioned
         if (photonEvent.Code == SendIDForSync && gameObject.GetPhotonView().IsMine)
         {
-            _idOfPlayerToBePositioned = (int) photonEvent.CustomData; 
+            _idOfPlayerToBePositioned = (int) photonEvent.CustomData;
             Debug.Log("Player to be positioned is " + _idOfPlayerToBePositioned);
         }
 
@@ -71,6 +71,7 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
         if (photonEvent.Code == ResetID && gameObject.GetPhotonView().IsMine)
         {
             _idOfPlayerToBePositioned = (int)photonEvent.CustomData;
+            gameObject.GetComponent<NetworkPlayer>().SetStateHasChanged(true);
         }
     }
 
@@ -79,6 +80,7 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
         if (!PhotonNetwork.IsMasterClient && gameObject.GetPhotonView().IsMine)
         {
             _idOfPlayerToBePositioned = gameObject.GetPhotonView().ViewID;
+            gameObject.GetComponent<NetworkPlayer>().SetStateHasChanged(true);
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.All};
             PhotonNetwork.RaiseEvent(SendIDForSync, gameObject.GetPhotonView().ViewID, raiseEventOptions, SendOptions.SendReliable);
         }

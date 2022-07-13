@@ -14,6 +14,7 @@ public class NetworkPlayer : MonoBehaviour
     private GameObject _centerEyeAnchor;
     private GameObject _leftHandAnchor;
     private GameObject _rightHandAnchor;
+    private bool _stateHasChanged = true;
 
     // Start is called before the first frame update
     void Start()
@@ -46,25 +47,40 @@ public class NetworkPlayer : MonoBehaviour
 
             meanHand.transform.position = Vector3.Lerp(leftHand.transform.position, rightHand.transform.position, 0.5f);
             meanHand.transform.rotation = Quaternion.Lerp(leftHand.transform.rotation, rightHand.transform.rotation, 0.5f);
-            
-            if (PhotonNetwork.IsMasterClient)
-                gameObject.GetPhotonView().RPC("SetColor", RpcTarget.AllBuffered, 1);
-            else if (gameObject.GetPhotonView().ViewID == gameObject.GetComponent<CoLocationSynchronizer>().GetIdOfPlayerToBePositioned()) 
-                gameObject.GetPhotonView().RPC("SetColor", RpcTarget.AllBuffered, 2);
-            else
-                gameObject.GetPhotonView().RPC("SetColor", RpcTarget.AllBuffered, 3);
-            
+
+            if (_stateHasChanged)
+            {
+                if (PhotonNetwork.IsMasterClient)
+                    gameObject.GetPhotonView().RPC("SetColor", RpcTarget.AllBuffered, 1);
+                else if (gameObject.GetPhotonView().ViewID == gameObject.GetComponent<CoLocationSynchronizer>().GetIdOfPlayerToBePositioned())
+                    gameObject.GetPhotonView().RPC("SetColor", RpcTarget.AllBuffered, 2);
+                else
+                    gameObject.GetPhotonView().RPC("SetColor", RpcTarget.AllBuffered, 3);
+
+                _stateHasChanged = false;
+            }
         }
+    }
+
+    public void SetStateHasChanged(bool stateHasChanged)
+    {
+        this._stateHasChanged = stateHasChanged;
     }
 
     [PunRPC]
     private void SetColor(int colorId)
     {
-        if(colorId == 1)
+        if (colorId == 1)
+        {
+            playerStateCapsule.enabled = true;
             playerStateCapsule.material.color = Color.red;
+        }
         else if (colorId == 2)
+        {
+            playerStateCapsule.enabled = true;
             playerStateCapsule.material.color = Color.blue;
+        }
         else
-            playerStateCapsule.material.color = Color.gray;
+            playerStateCapsule.enabled = false;
     }
 }
