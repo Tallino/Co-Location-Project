@@ -49,24 +49,28 @@ public class NetworkPlayer : MonoBehaviour
             meanHand.transform.rotation = Quaternion.Lerp(leftHand.transform.rotation, rightHand.transform.rotation, 0.5f);
 
             if (_stateHasChanged)
-            {
-                if (PhotonNetwork.IsMasterClient)
-                    gameObject.GetPhotonView().RPC("SetColor", RpcTarget.AllBuffered, 1);
-                else if (gameObject.GetPhotonView().ViewID == gameObject.GetComponent<CoLocationSynchronizer>().GetIdOfPlayerToBePositioned())
-                    gameObject.GetPhotonView().RPC("SetColor", RpcTarget.AllBuffered, 2);
-                else
-                    gameObject.GetPhotonView().RPC("SetColor", RpcTarget.AllBuffered, 3);
-
-                _stateHasChanged = false;
-            }
+                CheckPlayerState();
         }
     }
 
     public void SetStateHasChanged(bool stateHasChanged)
     {
-        this._stateHasChanged = stateHasChanged;
+        _stateHasChanged = stateHasChanged;
     }
 
+
+    private void CheckPlayerState()
+    {
+        if (PhotonNetwork.IsMasterClient)
+            gameObject.GetPhotonView().RPC("SetColor", RpcTarget.AllBuffered, 1);
+        else if (gameObject.GetPhotonView().ViewID == gameObject.GetComponent<CoLocationSynchronizer>().GetIdOfPlayerToBePositioned())
+            gameObject.GetPhotonView().RPC("SetColor", RpcTarget.AllBuffered, 2);
+        else
+            gameObject.GetPhotonView().RPC("SetColor", RpcTarget.AllBuffered, 3);
+
+        _stateHasChanged = false;
+    }
+    
     [PunRPC]
     private void SetColor(int colorId)
     {
