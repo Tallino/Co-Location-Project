@@ -1112,26 +1112,48 @@ public partial class @XRIDefaultInputActions : IInputActionCollection2, IDisposa
             ],
             ""bindings"": [
                 {
-                    ""name"": """",
-                    ""id"": ""a929aaed-a16a-4175-b734-a03bcea57fa2"",
-                    ""path"": ""<OpenVROculusTouchController>{RightHand}/primaryButton"",
+                    ""name"": ""Trigger + Grip + A"",
+                    ""id"": ""68a20b36-3b75-4f11-9e1a-b8ec139c1a7b"",
+                    ""path"": ""TwoModifiers"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SendData"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""9f6d4575-f27c-45e3-aa79-d2b28b09422e"",
+                    ""path"": ""<XRController>{RightHand}/primaryButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""SendData"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": false
+                    ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""1b2b8a56-d816-4c19-950b-13ed6b6a73cd"",
+                    ""name"": ""modifier2"",
+                    ""id"": ""244fac6f-f023-4719-a976-e7aceb0d0c77"",
+                    ""path"": ""<XRController>{RightHand}/gripPressed"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SendData"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""89ea6cdc-b03c-415c-8fd2-3ba358ed12bc"",
                     ""path"": ""<XRController>{RightHand}/triggerPressed"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""SendData"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": false
+                    ""isPartOfComposite"": true
                 }
             ]
         },
