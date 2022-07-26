@@ -7,8 +7,9 @@ public class DemoManager : MonoBehaviour, XRIDefaultInputActions.IDemo1Actions, 
 {
     private XRIDefaultInputActions _defaultInputActions;
     private GameObject _tempCircle;
-    private GameObject _cross;
+    private GameObject _tempCross;
     private bool _circleIsDrawn;
+    private bool _crossIsDrawn;
     
     // Start is called before the first frame update
     void Start()
@@ -42,7 +43,32 @@ public class DemoManager : MonoBehaviour, XRIDefaultInputActions.IDemo1Actions, 
 
     public void OnSpawnMeanX(InputAction.CallbackContext context)
     {
-        throw new NotImplementedException();
+        if (gameObject.GetPhotonView().IsMine && context.started && !PhotonNetwork.IsMasterClient)
+        {
+            if (!_crossIsDrawn)
+            {
+                var photonViews = FindObjectsOfType<PhotonView>();
+                int masterClientId = 1001;
+                
+                foreach (var view in photonViews)
+                    if (view.Owner.IsMasterClient)
+                        masterClientId = view.ViewID;
+
+                var masterClientPosition = PhotonView.Find(masterClientId).gameObject.GetComponent<NetworkPlayer>().head.position;
+                var myPosition = gameObject.GetComponent<NetworkPlayer>().head.position;
+                var meanPosition = Vector3.Lerp(masterClientPosition, myPosition, 0.5f);
+                
+                var tempPos = new Vector3(meanPosition.x, 0, meanPosition.z);
+                _tempCross = PhotonNetwork.Instantiate("Cross", tempPos, new Quaternion(0,0,0,0));
+                gameObject.GetPhotonView().RPC("DrawCross", RpcTarget.AllBuffered, _tempCross.GetPhotonView().ViewID);
+                _crossIsDrawn = true;
+            }
+            else
+            {
+                PhotonNetwork.Destroy(_tempCross);
+                _crossIsDrawn = false;
+            }
+        }
     }
 
     [PunRPC]
@@ -65,5 +91,38 @@ public class DemoManager : MonoBehaviour, XRIDefaultInputActions.IDemo1Actions, 
         }
 
         line.SetPositions(points);
+    }
+
+    [PunRPC]
+    private void DrawCross(int tempId)
+    {
+        var segments = 360;
+        var line = PhotonView.Find(tempId).gameObject.AddComponent<LineRenderer>();
+        var pointCount = segments + 1;
+        var crossRadius = 0.25f;
+        var step = crossRadius/pointCount;
+
+        var points1 = new Vector3[pointCount];
+        var points2 = new Vector3[pointCount];
+        var points3 = new Vector3[pointCount];
+        var points4 = new Vector3[pointCount];
+        
+        for (int i = 0; i < pointCount; i++) // abbiamo pointCount per ognuna delle due linee della X
+        {
+            var angle1 = 45 * Mathf.Deg2Rad;
+            var angle2 = 135 * Mathf.Deg2Rad;
+            var angle3 = 225 * Mathf.Deg2Rad;
+            var angle4 = 315 * Mathf.Deg2Rad;
+
+            points1[i] = new Vector3(Mathf.Sin(angle1), 0, Mathf.Cos(angle1)) * i * step;
+            points2[i] = new Vector3(Mathf.Sin(angle2), 0, Mathf.Cos(angle2)) * i * step;
+            points3[i] = new Vector3(Mathf.Sin(angle3), 0, Mathf.Cos(angle3)) * i * step;
+            points4[i] = new Vector3(Mathf.Sin(angle4), 0, Mathf.Cos(angle4)) * i * step;
+        }
+        
+        line.SetPositions(points1);
+        line.SetPositions(points2);
+        line.SetPositions(points3);
+        line.SetPositions(points4);
     }
 }
