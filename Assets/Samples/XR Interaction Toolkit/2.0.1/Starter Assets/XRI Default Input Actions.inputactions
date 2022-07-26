@@ -1162,6 +1162,106 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Demo1",
+            "id": "672c9541-56cd-4b3f-974c-8bbbcecbe17e",
+            "actions": [
+                {
+                    "name": "SpawnCircles",
+                    "type": "Button",
+                    "id": "8c639214-3405-42b3-ba09-d88cca43f829",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "One Modifier",
+                    "id": "1417da67-a4f4-4d7c-b57c-6002b5521eaa",
+                    "path": "OneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SpawnCircles",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "471fb581-a85a-4155-8337-b7bb222b76ae",
+                    "path": "<XRController>{LeftHand}/primaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SpawnCircles",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "binding",
+                    "id": "21221293-6c4a-4389-bb06-53b0a2c28aae",
+                    "path": "<XRController>{LeftHand}/secondaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SpawnCircles",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                }
+            ]
+        },
+        {
+            "name": "Demo2",
+            "id": "fed21235-7ef2-4094-8c04-725eb71f92f0",
+            "actions": [
+                {
+                    "name": "SpawnMeanX",
+                    "type": "Button",
+                    "id": "91ebd272-4a3a-4cf9-885c-a452725012c4",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "One Modifier",
+                    "id": "7ea3046e-7fd8-4821-890b-ec6c4404b08d",
+                    "path": "OneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SpawnMeanX",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "c15d305b-1543-4b3a-a525-851535963dff",
+                    "path": "<XRController>{LeftHand}/gripPressed",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SpawnMeanX",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "binding",
+                    "id": "83b4daf5-9fae-4793-94c9-6db65c9a7c76",
+                    "path": "<XRController>{LeftHand}/triggerPressed",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SpawnMeanX",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                }
+            ]
         }
     ],
     "controlSchemes": [

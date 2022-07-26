@@ -118,4 +118,4 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
         return _idOfPlayerToBePositioned;
     }
     
-}
+} 

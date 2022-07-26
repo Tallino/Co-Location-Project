@@ -1184,6 +1184,106 @@ public partial class @XRIDefaultInputActions : IInputActionCollection2, IDisposa
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Demo1"",
+            ""id"": ""672c9541-56cd-4b3f-974c-8bbbcecbe17e"",
+            ""actions"": [
+                {
+                    ""name"": ""SpawnCircles"",
+                    ""type"": ""Button"",
+                    ""id"": ""8c639214-3405-42b3-ba09-d88cca43f829"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""1417da67-a4f4-4d7c-b57c-6002b5521eaa"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SpawnCircles"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""471fb581-a85a-4155-8337-b7bb222b76ae"",
+                    ""path"": ""<XRController>{LeftHand}/primaryButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SpawnCircles"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""21221293-6c4a-4389-bb06-53b0a2c28aae"",
+                    ""path"": ""<XRController>{LeftHand}/secondaryButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SpawnCircles"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
+        },
+        {
+            ""name"": ""Demo2"",
+            ""id"": ""fed21235-7ef2-4094-8c04-725eb71f92f0"",
+            ""actions"": [
+                {
+                    ""name"": ""SpawnMeanX"",
+                    ""type"": ""Button"",
+                    ""id"": ""91ebd272-4a3a-4cf9-885c-a452725012c4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""7ea3046e-7fd8-4821-890b-ec6c4404b08d"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SpawnMeanX"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""c15d305b-1543-4b3a-a525-851535963dff"",
+                    ""path"": ""<XRController>{LeftHand}/gripPressed"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SpawnMeanX"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""83b4daf5-9fae-4793-94c9-6db65c9a7c76"",
+                    ""path"": ""<XRController>{LeftHand}/triggerPressed"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SpawnMeanX"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -1303,6 +1403,12 @@ public partial class @XRIDefaultInputActions : IInputActionCollection2, IDisposa
         // GestureDetection
         m_GestureDetection = asset.FindActionMap("GestureDetection", throwIfNotFound: true);
         m_GestureDetection_SaveGesture = m_GestureDetection.FindAction("SaveGesture", throwIfNotFound: true);
+        // Demo1
+        m_Demo1 = asset.FindActionMap("Demo1", throwIfNotFound: true);
+        m_Demo1_SpawnCircles = m_Demo1.FindAction("SpawnCircles", throwIfNotFound: true);
+        // Demo2
+        m_Demo2 = asset.FindActionMap("Demo2", throwIfNotFound: true);
+        m_Demo2_SpawnMeanX = m_Demo2.FindAction("SpawnMeanX", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1887,6 +1993,72 @@ public partial class @XRIDefaultInputActions : IInputActionCollection2, IDisposa
         }
     }
     public GestureDetectionActions @GestureDetection => new GestureDetectionActions(this);
+
+    // Demo1
+    private readonly InputActionMap m_Demo1;
+    private IDemo1Actions m_Demo1ActionsCallbackInterface;
+    private readonly InputAction m_Demo1_SpawnCircles;
+    public struct Demo1Actions
+    {
+        private @XRIDefaultInputActions m_Wrapper;
+        public Demo1Actions(@XRIDefaultInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @SpawnCircles => m_Wrapper.m_Demo1_SpawnCircles;
+        public InputActionMap Get() { return m_Wrapper.m_Demo1; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(Demo1Actions set) { return set.Get(); }
+        public void SetCallbacks(IDemo1Actions instance)
+        {
+            if (m_Wrapper.m_Demo1ActionsCallbackInterface != null)
+            {
+                @SpawnCircles.started -= m_Wrapper.m_Demo1ActionsCallbackInterface.OnSpawnCircles;
+                @SpawnCircles.performed -= m_Wrapper.m_Demo1ActionsCallbackInterface.OnSpawnCircles;
+                @SpawnCircles.canceled -= m_Wrapper.m_Demo1ActionsCallbackInterface.OnSpawnCircles;
+            }
+            m_Wrapper.m_Demo1ActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @SpawnCircles.started += instance.OnSpawnCircles;
+                @SpawnCircles.performed += instance.OnSpawnCircles;
+                @SpawnCircles.canceled += instance.OnSpawnCircles;
+            }
+        }
+    }
+    public Demo1Actions @Demo1 => new Demo1Actions(this);
+
+    // Demo2
+    private readonly InputActionMap m_Demo2;
+    private IDemo2Actions m_Demo2ActionsCallbackInterface;
+    private readonly InputAction m_Demo2_SpawnMeanX;
+    public struct Demo2Actions
+    {
+        private @XRIDefaultInputActions m_Wrapper;
+        public Demo2Actions(@XRIDefaultInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @SpawnMeanX => m_Wrapper.m_Demo2_SpawnMeanX;
+        public InputActionMap Get() { return m_Wrapper.m_Demo2; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(Demo2Actions set) { return set.Get(); }
+        public void SetCallbacks(IDemo2Actions instance)
+        {
+            if (m_Wrapper.m_Demo2ActionsCallbackInterface != null)
+            {
+                @SpawnMeanX.started -= m_Wrapper.m_Demo2ActionsCallbackInterface.OnSpawnMeanX;
+                @SpawnMeanX.performed -= m_Wrapper.m_Demo2ActionsCallbackInterface.OnSpawnMeanX;
+                @SpawnMeanX.canceled -= m_Wrapper.m_Demo2ActionsCallbackInterface.OnSpawnMeanX;
+            }
+            m_Wrapper.m_Demo2ActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @SpawnMeanX.started += instance.OnSpawnMeanX;
+                @SpawnMeanX.performed += instance.OnSpawnMeanX;
+                @SpawnMeanX.canceled += instance.OnSpawnMeanX;
+            }
+        }
+    }
+    public Demo2Actions @Demo2 => new Demo2Actions(this);
     private int m_GenericXRControllerSchemeIndex = -1;
     public InputControlScheme GenericXRControllerScheme
     {
@@ -1978,5 +2150,13 @@ public partial class @XRIDefaultInputActions : IInputActionCollection2, IDisposa
     public interface IGestureDetectionActions
     {
         void OnSaveGesture(InputAction.CallbackContext context);
+    }
+    public interface IDemo1Actions
+    {
+        void OnSpawnCircles(InputAction.CallbackContext context);
+    }
+    public interface IDemo2Actions
+    {
+        void OnSpawnMeanX(InputAction.CallbackContext context);
     }
 }
