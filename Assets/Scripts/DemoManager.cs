@@ -97,32 +97,40 @@ public class DemoManager : MonoBehaviour, XRIDefaultInputActions.IDemo1Actions, 
     private void DrawCross(int tempId)
     {
         var segments = 360;
-        var line = PhotonView.Find(tempId).gameObject.AddComponent<LineRenderer>();
         var pointCount = segments + 1;
         var crossRadius = 0.25f;
         var step = crossRadius/pointCount;
+        var counter = 0;
 
-        var points1 = new Vector3[pointCount];
-        var points2 = new Vector3[pointCount];
-        var points3 = new Vector3[pointCount];
-        var points4 = new Vector3[pointCount];
-        
-        for (int i = 0; i < pointCount; i++) // abbiamo pointCount per ognuna delle due linee della X
-        {
-            var angle1 = 45 * Mathf.Deg2Rad;
-            var angle2 = 135 * Mathf.Deg2Rad;
-            var angle3 = 225 * Mathf.Deg2Rad;
-            var angle4 = 315 * Mathf.Deg2Rad;
+        var line = PhotonView.Find(tempId).gameObject.AddComponent<LineRenderer>();
+        line.useWorldSpace = false;
+        line.startWidth = 0.02f;
+        line.endWidth = 0.02f;
+        line.positionCount = pointCount * 4 + 4;
 
-            points1[i] = new Vector3(Mathf.Sin(angle1), 0, Mathf.Cos(angle1)) * i * step;
-            points2[i] = new Vector3(Mathf.Sin(angle2), 0, Mathf.Cos(angle2)) * i * step;
-            points3[i] = new Vector3(Mathf.Sin(angle3), 0, Mathf.Cos(angle3)) * i * step;
-            points4[i] = new Vector3(Mathf.Sin(angle4), 0, Mathf.Cos(angle4)) * i * step;
-        }
+        var angle1 = 45 * Mathf.Deg2Rad;
+        var angle2 = 135 * Mathf.Deg2Rad;
+        var angle3 = 225 * Mathf.Deg2Rad;
+        var angle4 = 315 * Mathf.Deg2Rad;
+
+        for (int i = 0; i < pointCount; i++)
+            line.SetPosition(counter++, new Vector3(Mathf.Sin(angle1), 0, Mathf.Cos(angle1)) * i * step);
         
-        line.SetPositions(points1);
-        line.SetPositions(points2);
-        line.SetPositions(points3);
-        line.SetPositions(points4);
+        line.SetPosition(counter++, Vector3.zero);
+        
+        for (int i = 0; i < pointCount; i++)
+            line.SetPosition(counter++, new Vector3(Mathf.Sin(angle2), 0, Mathf.Cos(angle2)) * i * step);
+        
+        line.SetPosition(counter++, Vector3.zero);
+        
+        for (int i = 0; i < pointCount; i++)
+            line.SetPosition(counter++, new Vector3(Mathf.Sin(angle3), 0, Mathf.Cos(angle3)) * i * step);
+        
+        line.SetPosition(counter++, Vector3.zero);
+        
+        for (int i = 0; i < pointCount; i++)
+            line.SetPosition(counter++, new Vector3(Mathf.Sin(angle4), 0, Mathf.Cos(angle4)) * i * step);
+        
+        line.SetPosition(counter++, Vector3.zero);
     }
 }
