@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HandGrabbingBehaviour : OVRGrabber
@@ -7,8 +5,8 @@ public class HandGrabbingBehaviour : OVRGrabber
 
     private OVRHand _hand;
     private float pinchThreshold = 0.7f;
-    private Vector3 lastPos;
-    private Quaternion lastRot;
+    private Vector3 _lastPos;
+    private Quaternion _lastRot;
     
     // Start is called before the first frame update
     protected override void Start()
@@ -23,13 +21,13 @@ public class HandGrabbingBehaviour : OVRGrabber
         base.Update();
         CheckIndexPinch();
         
-        lastPos = transform.position;
-        lastRot = transform.rotation;
+        _lastPos = transform.position;
+        _lastRot = transform.rotation;
     }
 
-    void CheckIndexPinch()
+    private void CheckIndexPinch()
     {
-        float pinchStrength = _hand.GetFingerPinchStrength(OVRHand.HandFinger.Index);
+        var pinchStrength = _hand.GetFingerPinchStrength(OVRHand.HandFinger.Index);
         
         if(!m_grabbedObj && pinchStrength > pinchThreshold && m_grabCandidates.Count > 0)
             GrabBegin();
@@ -41,13 +39,9 @@ public class HandGrabbingBehaviour : OVRGrabber
     {
         if (m_grabbedObj)
         {
+            var linearVelocity = (transform.position - _lastPos) / Time.fixedDeltaTime;
+            var angularVelocity = (transform.eulerAngles - _lastRot.eulerAngles) / Time.fixedDeltaTime;
 
-            Vector3 linearVelocity = (transform.position - lastPos) / Time.fixedDeltaTime;
-            Vector3 angularVelocity = (transform.eulerAngles - lastRot.eulerAngles) / Time.fixedDeltaTime;
-
-            Debug.Log("linearVelocity: " + linearVelocity);
-            Debug.Log("angularVelocity: " + angularVelocity);
-            
             GrabbableRelease(linearVelocity, angularVelocity);
         }
         
