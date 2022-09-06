@@ -1,4 +1,3 @@
-using Photon.Pun;
 using UnityEngine;
 
 public class HandGrabbingBehaviour : OVRGrabber
@@ -29,12 +28,9 @@ public class HandGrabbingBehaviour : OVRGrabber
     private void CheckIndexPinch()
     {
         var pinchStrength = _hand.GetFingerPinchStrength(OVRHand.HandFinger.Index);
-
-        if (!m_grabbedObj && pinchStrength > pinchThreshold && m_grabCandidates.Count > 0)
-        {
+        
+        if(!m_grabbedObj && pinchStrength > pinchThreshold && m_grabCandidates.Count > 0)
             GrabBegin();
-            m_grabbedObj.gameObject.GetComponent<PhotonView>().RequestOwnership();
-        }
         else if(m_grabbedObj && !(pinchStrength > pinchThreshold))
             GrabEnd();
     }
