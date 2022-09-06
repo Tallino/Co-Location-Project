@@ -340,7 +340,7 @@ public class OVRGrabber : MonoBehaviour
         }
     }
 
-    virtual protected void GrabEnd()
+    protected void GrabEnd()
     {
         if (m_grabbedObj != null)
         {
