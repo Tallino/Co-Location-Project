@@ -131,6 +131,6 @@ public class DemoManager : MonoBehaviour, XRIDefaultInputActions.IDemo1Actions, 
         for (int i = 0; i < pointCount; i++)
             line.SetPosition(counter++, new Vector3(Mathf.Sin(angle4), 0, Mathf.Cos(angle4)) * i * step);
         
-        line.SetPosition(counter++, Vector3.zero);
+        line.SetPosition(counter, Vector3.zero);
     }
 }
