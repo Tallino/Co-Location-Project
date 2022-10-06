@@ -1,5 +1,6 @@
 using UnityEngine;
 using Photon.Pun;
+using UnityEditor;
 
 public class NetworkPlayer : MonoBehaviour
 {
@@ -38,6 +39,9 @@ public class NetworkPlayer : MonoBehaviour
 
             meanHand.transform.position = Vector3.Lerp(_leftHandAnchor.transform.position, _rightHandAnchor.transform.position, 0.5f);
             meanHand.transform.rotation = Quaternion.Lerp(_leftHandAnchor.transform.rotation, _rightHandAnchor.transform.rotation, 0.5f);
+            meanHand.transform.rotation = Quaternion.Euler(0 , meanHand.transform.rotation.eulerAngles.y, 0);
+            
+            Debug.Log("POSITION " + meanHand.transform.position + " ROTATION " + meanHand.transform.rotation.eulerAngles);
 
             if (_stateHasChanged)
                 CheckPlayerState();

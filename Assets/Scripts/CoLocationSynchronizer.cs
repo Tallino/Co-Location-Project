@@ -58,7 +58,8 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
             {
                 var meanHandPosition = Vector3.Lerp(GameObject.Find("LeftHandAnchor").transform.position, GameObject.Find("RightHandAnchor").transform.position, 0.5f);
                 var meanHandRotation = Quaternion.Lerp(GameObject.Find("LeftHandAnchor").transform.rotation, GameObject.Find("RightHandAnchor").transform.rotation, 0.5f);
-
+                meanHandRotation = Quaternion.Euler(0 , meanHandRotation.eulerAngles.y, 0);
+                
                 object[] posInfoToSend = {meanHandPosition, meanHandRotation, Vector3.ProjectOnPlane(gameObject.GetComponent<NetworkPlayer>().head.forward, Vector3.up)};
 
                 RaiseEventOptions raiseEventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.Others};
@@ -90,6 +91,7 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
             //Finding Mean Hand information of the player to be positioned (ourselves)
             var myMeanHandPosition = Vector3.Lerp(GameObject.Find("LeftHandAnchor").transform.position, GameObject.Find("RightHandAnchor").transform.position, 0.5f);
             var myMeanHandRotation = Quaternion.Lerp(GameObject.Find("LeftHandAnchor").transform.rotation, GameObject.Find("RightHandAnchor").transform.rotation, 0.5f);
+            myMeanHandRotation = Quaternion.Euler(0 , myMeanHandRotation.eulerAngles.y, 0);
 
             //CALCULATING ROTATION
             var deltaRotation = otherMeanHandRotation.eulerAngles.y - myMeanHandRotation.eulerAngles.y;
@@ -102,13 +104,16 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
             GameObject.Find("OVRCameraRig").gameObject.transform.RotateAround(myMeanHandPosition, Vector3.up, 180 + deltaRotation);
             GameObject.Find("OVRCameraRig").gameObject.transform.position += deltaPosition;
             
+            /*
             //EVENTUAL EXTRA ROTATION
             if(Vector3.Dot(otherForwardVector, Vector3.ProjectOnPlane(gameObject.GetComponent<NetworkPlayer>().head.forward, Vector3.up)) > 0)
             {
                 RaiseEventOptions eventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.All};
                 PhotonNetwork.RaiseEvent(DebugCode, 0, eventOptions, SendOptions.SendReliable);
+                
                 GameObject.Find("OVRCameraRig").gameObject.transform.RotateAround(myMeanHandPosition, Vector3.up, 180);
             }
+            */
             
             //Resetting ID of player to be positioned
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.All};
