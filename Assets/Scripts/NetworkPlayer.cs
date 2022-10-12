@@ -8,7 +8,8 @@ public class NetworkPlayer : MonoBehaviour
     public GameObject leftEye;
     public GameObject rightEye;
     public GameObject meanHand;
-    public TextMeshProUGUI _text;
+    public GameObject canvas;
+    public TextMeshProUGUI text;
     public Transform head;
     public MeshRenderer playerStateCapsule;
     
@@ -28,6 +29,10 @@ public class NetworkPlayer : MonoBehaviour
             _centerEyeAnchor = GameObject.Find("CenterEyeAnchor").gameObject;
             _leftHandAnchor = GameObject.Find("LeftHandAnchor").gameObject;
             _rightHandAnchor = GameObject.Find("RightHandAnchor").gameObject;
+        }
+        else
+        {
+            canvas.SetActive(false);
         }
     }
 
@@ -58,30 +63,30 @@ public class NetworkPlayer : MonoBehaviour
         {
             gameObject.GetPhotonView().RPC("SetColor", RpcTarget.AllBuffered, 1);
 
-            _text.text = "You are the MASTER CLIENT<br><br>";
+            text.text = "You are the MASTER CLIENT<br><br>";
             if (gameObject.GetComponent<CoLocationSynchronizer>().GetIdOfPlayerToBePositioned() == 0)
             {
-                _text.text += "Waiting for a player to candidate for colocation: a BLUE capsule will appear above his head";
+                text.text += "Waiting for a player to candidate for colocation: a BLUE capsule will appear above his head";
             }
             else
             {
-                _text.text += "A player is ready for colocation: leave your controllers on a table near you and walk towards him<br><br>";
-                _text.text += "While he keeps his hands behind his back, put your open hands in front of him<br><br>";
-                _text.text += "When he sees BOTH of your hands, make a two sign with your right hand (close thumb, ring and pinky fingers)<br><br>";
-                _text.text += "Repeat until colocation is 100% accurate";
+                text.text += "A player is ready for colocation: leave your controllers on a table near you and walk towards him<br><br>";
+                text.text += "While he keeps his hands behind his back, put your open hands in front of him<br><br>";
+                text.text += "When he sees BOTH of your hands, make a two sign with your right hand (close thumb, ring and pinky fingers)<br><br>";
+                text.text += "Repeat until colocation is 100% accurate";
             }
 
         }
         else if (gameObject.GetPhotonView().ViewID == gameObject.GetComponent<CoLocationSynchronizer>().GetIdOfPlayerToBePositioned())
         {
             gameObject.GetPhotonView().RPC("SetColor", RpcTarget.AllBuffered, 2);
-            _text.text = "You are ready for colocation: leave your controllers on a table near you<br><br>";
-            _text.text += "Put your hands behind your back and walk towards the MASTER CLIENT (RED capsule above his head)";
+            text.text = "You are ready for colocation: leave your controllers on a table near you<br><br>";
+            text.text += "Put your hands behind your back and walk towards the MASTER CLIENT (RED capsule above his head)";
         }
         else
         {
             gameObject.GetPhotonView().RPC("SetColor", RpcTarget.AllBuffered, 3);
-            _text.text = "Press Grip, Trigger and A button to candidate for Colocation";
+            text.text = "Press Grip, Trigger and A button to candidate for Colocation";
         }
 
         _stateHasChanged = false;
