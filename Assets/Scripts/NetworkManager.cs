@@ -58,7 +58,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         var photonViews = FindObjectsOfType<PhotonView>();
         
         foreach (var view in photonViews)
-            if(view.Owner.IsMasterClient)
+            if(view.Owner is {IsMasterClient: true})
                 view.gameObject.GetComponent<NetworkPlayer>().SetStateHasChanged(true);
     }
 }

@@ -11,6 +11,7 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
     private const byte SendPositionForCoLocation = 2;
     private const byte ResetID = 3;
     private const byte DebugCode = 4;
+    private const byte DebugDemo = 5;
     private bool _coLocationDone;
     private int _idOfPlayerToBePositioned;
 
@@ -131,6 +132,12 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
         if (photonEvent.Code == DebugCode && gameObject.GetPhotonView().IsMine)
         {
             Debug.Log("EXTRA ROTATION DONE!!");
+        }
+        
+        if (photonEvent.Code == DebugDemo && gameObject.GetPhotonView().IsMine)
+        {
+            Debug.Log("-----------WE ARRIVED HERE------------");
+            // Debug.Log("EXCEPTION: " + (string)photonEvent.CustomData);
         }
     }
 

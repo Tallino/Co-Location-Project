@@ -1,5 +1,7 @@
 using System;
+using ExitGames.Client.Photon;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,6 +12,7 @@ public class DemoManager : MonoBehaviour, XRIDefaultInputActions.IDemo1Actions, 
     private GameObject _tempCross;
     private bool _circleIsDrawn;
     private bool _crossIsDrawn;
+    private const byte DebugDemo = 5;
     
     // Start is called before the first frame update
     void Start()
@@ -48,26 +51,26 @@ public class DemoManager : MonoBehaviour, XRIDefaultInputActions.IDemo1Actions, 
             if (!_crossIsDrawn)
             {
                 var photonViews = FindObjectsOfType<PhotonView>();
-                int masterClientId = 1001;
-                
+                var masterClientId = 0;
+
                 foreach (var view in photonViews)
-                    if (view.Owner.IsMasterClient)
+                    if (view.Owner is {IsMasterClient: true})
                         masterClientId = view.ViewID;
 
                 var masterClientPosition = PhotonView.Find(masterClientId).gameObject.GetComponent<NetworkPlayer>().head.position;
                 var myPosition = gameObject.GetComponent<NetworkPlayer>().head.position;
                 var meanPosition = Vector3.Lerp(masterClientPosition, myPosition, 0.5f);
-                
                 var tempPos = new Vector3(meanPosition.x, 0, meanPosition.z);
+
                 _tempCross = PhotonNetwork.Instantiate("Cross", tempPos, new Quaternion(0,0,0,0));
                 gameObject.GetPhotonView().RPC("DrawCross", RpcTarget.AllBuffered, _tempCross.GetPhotonView().ViewID);
                 _crossIsDrawn = true;
             }
-            else
-            {
-                PhotonNetwork.Destroy(_tempCross);
-                _crossIsDrawn = false;
-            }
+        }
+        else
+        {
+            PhotonNetwork.Destroy(_tempCross);
+            _crossIsDrawn = false;
         }
     }
 
