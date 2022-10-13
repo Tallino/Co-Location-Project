@@ -61,16 +61,19 @@ public class DemoManager : MonoBehaviour, XRIDefaultInputActions.IDemo1Actions, 
                 var myPosition = gameObject.GetComponent<NetworkPlayer>().head.position;
                 var meanPosition = Vector3.Lerp(masterClientPosition, myPosition, 0.5f);
                 var tempPos = new Vector3(meanPosition.x, 0, meanPosition.z);
-
+                
+                //IL PROBLEMA E' QUI
                 _tempCross = PhotonNetwork.Instantiate("Cross", tempPos, new Quaternion(0,0,0,0));
+                //IL PROBLEMA E' QUI
+                
                 gameObject.GetPhotonView().RPC("DrawCross", RpcTarget.AllBuffered, _tempCross.GetPhotonView().ViewID);
                 _crossIsDrawn = true;
             }
-        }
-        else
-        {
-            PhotonNetwork.Destroy(_tempCross);
-            _crossIsDrawn = false;
+            else
+            {
+                PhotonNetwork.Destroy(_tempCross);
+                _crossIsDrawn = false;
+            }
         }
     }
 

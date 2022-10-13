@@ -137,7 +137,7 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
         if (photonEvent.Code == DebugDemo && gameObject.GetPhotonView().IsMine)
         {
             Debug.Log("-----------WE ARRIVED HERE------------");
-            // Debug.Log("EXCEPTION: " + (string)photonEvent.CustomData);
+            Debug.Log("VIEW ID: " + (Vector3)photonEvent.CustomData);
         }
     }
 
