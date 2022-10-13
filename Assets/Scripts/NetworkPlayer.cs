@@ -75,7 +75,6 @@ public class NetworkPlayer : MonoBehaviour
                 text.text += "When he sees BOTH of your hands, make a two sign with your right hand (close thumb, ring and pinky fingers)<br><br>";
                 text.text += "Repeat until colocation is 100% accurate";
             }
-
         }
         else if (gameObject.GetPhotonView().ViewID == gameObject.GetComponent<CoLocationSynchronizer>().GetIdOfPlayerToBePositioned())
         {
