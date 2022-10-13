@@ -70,7 +70,7 @@ public class NetworkPlayer : MonoBehaviour
             }
             else
             {
-                text.text += "A player is ready for colocation: leave your controllers on a table near you and walk towards him<br><br>";
+                text.text += "A player is ready for colocation: leave your controllers on a table near you and walk towards him (BLUE capsule above his head)<br><br>";
                 text.text += "While he keeps his hands behind his back, put your open hands in front of him<br><br>";
                 text.text += "When he sees BOTH of your hands, make a two sign with your right hand (close thumb, ring and pinky fingers)<br><br>";
                 text.text += "Repeat until colocation is 100% accurate";
@@ -86,7 +86,7 @@ public class NetworkPlayer : MonoBehaviour
         else
         {
             gameObject.GetPhotonView().RPC("SetColor", RpcTarget.AllBuffered, 3);
-            text.text = "Press Grip, Trigger and A button to candidate for Colocation";
+            text.text = "Press Grip, Trigger and A button on your right controller to candidate for colocation";
         }
 
         _stateHasChanged = false;

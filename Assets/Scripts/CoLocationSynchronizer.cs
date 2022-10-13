@@ -10,8 +10,6 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
     private const byte SendIDForSync = 1;
     private const byte SendPositionForCoLocation = 2;
     private const byte ResetID = 3;
-    private const byte DebugCode = 4;
-    private const byte DebugDemo = 5;
     private bool _coLocationDone;
     private int _idOfPlayerToBePositioned;
 
@@ -87,7 +85,10 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
             //Receiving Mean Hand information and Forward Vector information from the master client
             var otherMeanHandPosition = (Vector3)data[0];
             var otherMeanHandRotation = (Quaternion)data[1];
-            var otherForwardVector = (Vector3)data[2];
+            
+            /*
+             * var otherForwardVector = (Vector3)data[2];
+             */
 
             //Finding Mean Hand information of the player to be positioned (ourselves)
             var myMeanHandPosition = Vector3.Lerp(GameObject.Find("LeftHandAnchor").transform.position, GameObject.Find("RightHandAnchor").transform.position, 0.5f);
@@ -129,16 +130,12 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
             Debug.Log("Co-Location ended");
         }
         
+        /*
         if (photonEvent.Code == DebugCode && gameObject.GetPhotonView().IsMine)
         {
             Debug.Log("EXTRA ROTATION DONE!!");
         }
-        
-        if (photonEvent.Code == DebugDemo && gameObject.GetPhotonView().IsMine)
-        {
-            Debug.Log("-----------WE ARRIVED HERE------------");
-            Debug.Log("VIEW ID: " + (Vector3)photonEvent.CustomData);
-        }
+        */
     }
 
     public int GetIdOfPlayerToBePositioned()

@@ -12,8 +12,7 @@ public class DemoManager : MonoBehaviour, XRIDefaultInputActions.IDemo1Actions, 
     private GameObject _tempCross;
     private bool _circleIsDrawn;
     private bool _crossIsDrawn;
-    private const byte DebugDemo = 5;
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,7 +30,7 @@ public class DemoManager : MonoBehaviour, XRIDefaultInputActions.IDemo1Actions, 
         {
             if (!_circleIsDrawn)
             {
-                var tempPos = new Vector3(gameObject.GetComponent<NetworkPlayer>().head.position.x, 0, gameObject.GetComponent<NetworkPlayer>().head.position.z - 0.2f);
+                var tempPos = new Vector3(gameObject.GetComponent<NetworkPlayer>().head.position.x, 0, gameObject.GetComponent<NetworkPlayer>().head.position.z);
                 _tempCircle = PhotonNetwork.Instantiate("Circle", tempPos, new Quaternion(0,0,0,0));
                 gameObject.GetPhotonView().RPC("DrawCircle", RpcTarget.AllBuffered, _tempCircle.GetPhotonView().ViewID);
                 _circleIsDrawn = true;
@@ -62,10 +61,7 @@ public class DemoManager : MonoBehaviour, XRIDefaultInputActions.IDemo1Actions, 
                 var meanPosition = Vector3.Lerp(masterClientPosition, myPosition, 0.5f);
                 var tempPos = new Vector3(meanPosition.x, 0, meanPosition.z);
                 
-                //IL PROBLEMA E' QUI
                 _tempCross = PhotonNetwork.Instantiate("Cross", tempPos, new Quaternion(0,0,0,0));
-                //IL PROBLEMA E' QUI
-                
                 gameObject.GetPhotonView().RPC("DrawCross", RpcTarget.AllBuffered, _tempCross.GetPhotonView().ViewID);
                 _crossIsDrawn = true;
             }
