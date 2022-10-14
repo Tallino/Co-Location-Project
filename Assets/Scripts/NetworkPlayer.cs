@@ -16,6 +16,13 @@ public class NetworkPlayer : MonoBehaviour
     private GameObject _centerEyeAnchor;
     private GameObject _leftHandAnchor;
     private GameObject _rightHandAnchor;
+
+    private GameObject _leftHandTrackingPrefab;
+    private GameObject _rightHandTrackingPrefab;
+
+    private GameObject _leftHandMesh;
+    private GameObject _rightHandMesh;
+    
     private bool _stateHasChanged = true;
 
     // Start is called before the first frame update
@@ -29,6 +36,12 @@ public class NetworkPlayer : MonoBehaviour
             _centerEyeAnchor = GameObject.Find("CenterEyeAnchor").gameObject;
             _leftHandAnchor = GameObject.Find("LeftHandAnchor").gameObject;
             _rightHandAnchor = GameObject.Find("RightHandAnchor").gameObject;
+
+            _leftHandTrackingPrefab = GameObject.Find("OVRLeftHandPrefab").gameObject;
+            _rightHandTrackingPrefab = GameObject.Find("OVRRightHandPrefab").gameObject;
+
+            _leftHandMesh = GameObject.Find("hands:Lhand").gameObject;
+            _rightHandMesh = GameObject.Find("hands:Rhand").gameObject;
         }
         else
         {
@@ -49,6 +62,17 @@ public class NetworkPlayer : MonoBehaviour
 
             if (_stateHasChanged)
                 CheckPlayerState();
+
+            if (_leftHandTrackingPrefab.GetComponent<OVRHand>().IsTracked || _rightHandTrackingPrefab.GetComponent<OVRHand>().IsTracked)
+            {
+                _leftHandMesh.GetComponent<SkinnedMeshRenderer>().enabled = false;
+                _rightHandMesh.GetComponent<SkinnedMeshRenderer>().enabled = false;
+            }
+            else
+            {
+                _leftHandMesh.GetComponent<SkinnedMeshRenderer>().enabled = true;
+                _rightHandMesh.GetComponent<SkinnedMeshRenderer>().enabled = true;
+            }
         }
     }
 
