@@ -146,7 +146,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 53
+  controlID: 93
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -171,7 +171,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 200}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 42
+  controlID: 126
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -249,7 +249,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 200}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 83
+  controlID: 17
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -484,9 +484,9 @@ MonoBehaviour:
       floating: 0
       collapsed: 0
       displayed: 1
-      snapOffset: {x: 67.5, y: 86}
+      snapOffset: {x: -111, y: 26}
       snapOffsetDelta: {x: 0, y: 0}
-      snapCorner: 0
+      snapCorner: 1
       id: Orientation
       index: 0
       layout: 4
@@ -621,9 +621,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -0.41855806, y: 0.867834, z: -0.8819598}
+    m_Target: {x: 1.3396922, y: -13.293991, z: 14.316599}
     speed: 2
-    m_Value: {x: -0.41855806, y: 0.867834, z: -0.8819598}
+    m_Value: {x: 1.3396922, y: -13.293991, z: 14.316599}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -670,20 +670,20 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.39407876, y: 0.2317555, z: -0.10374663, w: 0.8833758}
+    m_Target: {x: 0.36551535, y: 0.04752522, z: -0.019031106, w: 0.92946416}
     speed: 2
-    m_Value: {x: 0.39272875, y: 0.23189642, z: -0.10339234, w: 0.8839108}
+    m_Value: {x: 0.36409783, y: 0.04755073, z: -0.018958585, w: 0.92995286}
   m_Size:
-    m_Target: 0.08660255
+    m_Target: 10
     speed: 2
-    m_Value: 0.08660256
+    m_Value: 9.999999
   m_Ortho:
     m_Target: 0
     speed: 2
     m_Value: 0
   m_CameraSettings:
-    m_Speed: 0.607
-    m_SpeedNormalized: 0.29999998
+    m_Speed: 1.0846
+    m_SpeedNormalized: 0.53999996
     m_SpeedMin: 0.01
     m_SpeedMax: 2
     m_EasingEnabled: 1
@@ -762,9 +762,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 
-      m_LastClickedID: 0
-      m_ExpandedIDs: 8ad3ffff94d3ffffd0d3ffffded3ffff9cdeffffb6deffffe4e4fffff0e4fffff4e4fffffee4ffff04e5ffff10e5ffff18e5ffff5efaffffe0fafffff2fafffff6faffff24fbffff7c7c00008e7c0000
+      m_SelectedIDs: 667c0000
+      m_LastClickedID: 31846
+      m_ExpandedIDs: e0faffffe2fafffff6faffff18fbffff22fbffff24fbffff667c0000b27c0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -818,7 +818,7 @@ MonoBehaviour:
     m_LastAppliedPresetName: Default
     m_SaveData: []
   m_SearchFilter:
-    m_NameFilter: 
+    m_NameFilter: passthrough
     m_ClassNames: []
     m_AssetLabels: []
     m_AssetBundleNames: []
@@ -830,22 +830,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Resources
+    - Assets/Scripts
     m_Globs: []
-    m_OriginalText: 
+    m_OriginalText: passthrough
   m_ViewMode: 1
   m_StartGridSize: 62
   m_LastFolders:
-  - Assets/Resources
+  - Assets/Scripts
   m_LastFoldersGridSize: 62
   m_LastProjectPath: D:\Co-Location-Project
   m_LockTracker:
     m_IsLocked: 1
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: be830000
-    m_LastClickedID: 33726
-    m_ExpandedIDs: 00000000cc810000ce810000d0810000d281000000ca9a3b
+    m_SelectedIDs: 16850000
+    m_LastClickedID: 34070
+    m_ExpandedIDs: 00000000fe84000000850000028500000485000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -873,7 +873,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000cc810000ce810000d0810000d2810000
+    m_ExpandedIDs: 00000000fe840000008500000285000004850000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -900,7 +900,7 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 1
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: c62300003ea50000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -965,7 +965,7 @@ MonoBehaviour:
     m_ControlHash: -371814159
     m_PrefName: Preview_InspectorPreview
   m_LastInspectedObjectInstanceID: -1
-  m_LastVerticalScrollValue: 279
+  m_LastVerticalScrollValue: 0
   m_GlobalObjectId: 
   m_InspectorMode: 0
   m_LockTracker:
