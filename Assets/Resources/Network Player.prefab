@@ -653,7 +653,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27004de407725df47bee96e8e690bf38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  threshold: 0.05
+  threshold: 0.04
   debugMode: 1
   gestures:
   - fingerDatas:

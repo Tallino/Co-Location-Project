@@ -93,7 +93,8 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
             //Finding Mean Hand information of the player to be positioned (ourselves)
             var myMeanHandPosition = Vector3.Lerp(GameObject.Find("LeftHandAnchor").transform.position, GameObject.Find("RightHandAnchor").transform.position, 0.5f);
             var myMeanHandRotation = Quaternion.Lerp(GameObject.Find("LeftHandAnchor").transform.rotation, GameObject.Find("RightHandAnchor").transform.rotation, 0.5f);
-            myMeanHandRotation = Quaternion.Euler(0 , myMeanHandRotation.eulerAngles.y, 0);
+           
+            //myMeanHandRotation = Quaternion.Euler(0 , myMeanHandRotation.eulerAngles.y, 0);
 
             //CALCULATING ROTATION
             var deltaRotation = otherMeanHandRotation.eulerAngles.y - myMeanHandRotation.eulerAngles.y;

@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 989
   m_ShowMode: 4
-  m_Title: Hierarchy
+  m_Title: Scene
   m_RootView: {fileID: 3}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -146,7 +146,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 93
+  controlID: 152
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -171,7 +171,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 200}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 126
+  controlID: 130
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -249,7 +249,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 200}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 17
+  controlID: 105
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -672,11 +672,11 @@ MonoBehaviour:
   m_Rotation:
     m_Target: {x: 0.36551535, y: 0.04752522, z: -0.019031106, w: 0.92946416}
     speed: 2
-    m_Value: {x: 0.36409783, y: 0.04755073, z: -0.018958585, w: 0.92995286}
+    m_Value: {x: -0.36551535, y: -0.04752522, z: 0.019031107, w: -0.92946416}
   m_Size:
     m_Target: 10
     speed: 2
-    m_Value: 9.999999
+    m_Value: 10
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -762,9 +762,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 667c0000
-      m_LastClickedID: 31846
-      m_ExpandedIDs: e0faffffe2fafffff6faffff18fbffff22fbffff24fbffff667c0000b27c0000
+      m_SelectedIDs: 
+      m_LastClickedID: 0
+      m_ExpandedIDs: b2e3ffffe4e4ffff6ef0ffff24fbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -818,7 +818,7 @@ MonoBehaviour:
     m_LastAppliedPresetName: Default
     m_SaveData: []
   m_SearchFilter:
-    m_NameFilter: passthrough
+    m_NameFilter: 
     m_ClassNames: []
     m_AssetLabels: []
     m_AssetBundleNames: []
@@ -830,22 +830,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts
+    - Assets/Resources
     m_Globs: []
-    m_OriginalText: passthrough
+    m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 62
   m_LastFolders:
-  - Assets/Scripts
+  - Assets/Resources
   m_LastFoldersGridSize: 62
   m_LastProjectPath: D:\Co-Location-Project
   m_LockTracker:
     m_IsLocked: 1
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 16850000
-    m_LastClickedID: 34070
-    m_ExpandedIDs: 00000000fe84000000850000028500000485000000ca9a3b
+    m_SelectedIDs: 0a850000
+    m_LastClickedID: 34058
+    m_ExpandedIDs: 00000000f8840000fa840000fc840000fe84000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -873,7 +873,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000fe840000008500000285000004850000
+    m_ExpandedIDs: 00000000f8840000fa840000fc840000fe840000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
