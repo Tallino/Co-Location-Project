@@ -110,7 +110,7 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
             if (Vector3.Dot(otherForwardVector, myForwardVector) > 0)
             {
                 GameObject.Find("OVRCameraRig").gameObject.transform.RotateAround(myMeanHandPosition, Vector3.up, 180);
-                gameObject.GetComponent<NetworkPlayer>().head.RotateAround(myMeanHandPosition, Vector3.up, deltaRotation);
+                gameObject.GetComponent<NetworkPlayer>().head.RotateAround(myMeanHandPosition, Vector3.up, 180);
             }
 
             //APPLYING POSITION
