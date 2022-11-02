@@ -11,7 +11,6 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
     private const byte SendIDForSync = 1;
     private const byte SendPositionForCoLocation = 2;
     private const byte ResetID = 3;
-    private const byte DebugCode = 4;
     private bool _coLocationDone;
     private int _idOfPlayerToBePositioned;
 
@@ -102,14 +101,18 @@ public class CoLocationSynchronizer : MonoBehaviourPunCallbacks, XRIDefaultInput
 
             //APPLYING ROTATION
             GameObject.Find("OVRCameraRig").gameObject.transform.RotateAround(myMeanHandPosition, Vector3.up, deltaRotation);
-            
+            gameObject.GetComponent<NetworkPlayer>().head.RotateAround(myMeanHandPosition, Vector3.up, deltaRotation);
+
             //GETTING MY FORWARD VECTOR
-            var myForwardVector = Vector3.ProjectOnPlane(GameObject.Find("OVRCameraRig").gameObject.transform.forward, Vector3.up);
-            
+            var myForwardVector = Vector3.ProjectOnPlane(gameObject.GetComponent<NetworkPlayer>().head.forward, Vector3.up);
+
             //EVENTUAL EXTRA ROTATION
-            if(Vector3.Dot(otherForwardVector, myForwardVector) < 0)
+            if (Vector3.Dot(otherForwardVector, myForwardVector) > 0)
+            {
                 GameObject.Find("OVRCameraRig").gameObject.transform.RotateAround(myMeanHandPosition, Vector3.up, 180);
-            
+                gameObject.GetComponent<NetworkPlayer>().head.RotateAround(myMeanHandPosition, Vector3.up, deltaRotation);
+            }
+
             //APPLYING POSITION
             GameObject.Find("OVRCameraRig").gameObject.transform.position += deltaPosition;
 

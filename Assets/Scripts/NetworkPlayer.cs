@@ -61,7 +61,7 @@ public class NetworkPlayer : MonoBehaviour
             
             if (_stateHasChanged)
                 CheckPlayerState();
-
+            
             if (_leftHandTrackingPrefab.GetComponent<OVRHand>().IsTracked || _rightHandTrackingPrefab.GetComponent<OVRHand>().IsTracked)
             {
                 _leftHandMesh.GetComponent<SkinnedMeshRenderer>().enabled = false;
