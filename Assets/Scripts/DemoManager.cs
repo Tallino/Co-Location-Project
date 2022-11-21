@@ -13,7 +13,7 @@ public class DemoManager : MonoBehaviour, XRIDefaultInputActions.IDemo1Actions, 
     private bool _circleIsDrawn;
     private bool _crossIsDrawn;
 
-    // Start is called before the first frame update
+    //INITIALIZE CALLBACKS
     void Start()
     {
         _defaultInputActions = new XRIDefaultInputActions();
@@ -24,6 +24,7 @@ public class DemoManager : MonoBehaviour, XRIDefaultInputActions.IDemo1Actions, 
         _defaultInputActions.Demo2.Enable();
     }
 
+    //Triggered by pressing X and Y on left controller
     public void OnSpawnCircles(InputAction.CallbackContext context)
     {
         if (gameObject.GetPhotonView().IsMine && context.started)
@@ -43,6 +44,7 @@ public class DemoManager : MonoBehaviour, XRIDefaultInputActions.IDemo1Actions, 
         }
     }
 
+    //Triggered by pressing Grip and Trigger on left controller
     public void OnSpawnMeanX(InputAction.CallbackContext context)
     {
         if (gameObject.GetPhotonView().IsMine && context.started && !PhotonNetwork.IsMasterClient)
@@ -73,6 +75,7 @@ public class DemoManager : MonoBehaviour, XRIDefaultInputActions.IDemo1Actions, 
         }
     }
 
+    //Draw a circle using LineRenderer
     [PunRPC]
     private void DrawCircle(int tempId)
     {
@@ -95,6 +98,7 @@ public class DemoManager : MonoBehaviour, XRIDefaultInputActions.IDemo1Actions, 
         line.SetPositions(points);
     }
 
+    //Draw a cross using LineRenderer (Cross composed of 4 segments)
     [PunRPC]
     private void DrawCross(int tempId)
     {

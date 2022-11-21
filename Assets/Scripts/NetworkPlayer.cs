@@ -24,8 +24,7 @@ public class NetworkPlayer : MonoBehaviour
     private GameObject _rightHandMesh;
     
     private bool _stateHasChanged = true;
-
-    // Start is called before the first frame update
+    
     void Start()
     {
         if (gameObject.GetPhotonView().IsMine)
@@ -53,15 +52,18 @@ public class NetworkPlayer : MonoBehaviour
     {
         if (gameObject.GetPhotonView().IsMine)
         {
+            //Head sphere ALWAYS follows the CameraRig
             head.position = _centerEyeAnchor.transform.position;
             head.rotation = _centerEyeAnchor.transform.rotation;
 
+            //Mean Hand Green Cylinder at half-way between the hands.
             meanHand.transform.position = Vector3.Lerp(_leftHandAnchor.transform.position, _rightHandAnchor.transform.position, 0.5f);
             meanHand.transform.rotation = Quaternion.Lerp(_leftHandAnchor.transform.rotation, _rightHandAnchor.transform.rotation, 0.5f);
             
             if (_stateHasChanged)
                 CheckPlayerState();
             
+            //Hide hands-on-controller prefab while hand tracking
             if (_leftHandTrackingPrefab.GetComponent<OVRHand>().IsTracked || _rightHandTrackingPrefab.GetComponent<OVRHand>().IsTracked)
             {
                 _leftHandMesh.GetComponent<SkinnedMeshRenderer>().enabled = false;
@@ -80,10 +82,12 @@ public class NetworkPlayer : MonoBehaviour
         _stateHasChanged = stateHasChanged;
     }
     
+    //When a player state has changed, notify all
     private void CheckPlayerState()
     {
         if (PhotonNetwork.IsMasterClient)
         {
+            //Change player state capsule color based on state
             gameObject.GetPhotonView().RPC("SetColor", RpcTarget.AllBuffered, 1);
 
             text.text = "You are the MASTER CLIENT<br><br>";

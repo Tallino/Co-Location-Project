@@ -19,6 +19,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Debug.Log("Trying to connect to the server");
     }
 
+    //CREATE ROOM
     public override void OnConnectedToMaster()
     {
         Debug.Log("Successfully connected to the server");
@@ -32,6 +33,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinOrCreateRoom("Room 1", roomOptions, TypedLobby.Default);
     }
     
+    //SPAWN PLAYER
     public override void OnJoinedRoom()
     {
         Debug.Log("I am connected to the room");
@@ -45,12 +47,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         base.OnPlayerEnteredRoom(newPlayer);
     }
     
+    //DESTROY PLAYER
     public override void OnLeftRoom()
     {
         base.OnLeftRoom();
         PhotonNetwork.Destroy(_spawnedPlayerPrefab);
     }
 
+    //SUBSTITUTE MASTER CLIENT AND NOTIFY STATE CHANGE
     public override void OnMasterClientSwitched(Player newMasterClient)
     {
         base.OnMasterClientSwitched(newMasterClient);

@@ -25,7 +25,7 @@ public class GestureDetector : MonoBehaviour, XRIDefaultInputActions.IGestureDet
     private List<OVRBone> _fingerBones;
     private CoLocationSynchronizer _coLocationSynchronizer;
 
-    // Start is called before the first frame update
+    // INITIALIZE FINGER BONES
     void Start()
     {
         _skeleton = GameObject.Find("OVRRightHandPrefab").GetComponent<OVRSkeleton>();
@@ -41,6 +41,7 @@ public class GestureDetector : MonoBehaviour, XRIDefaultInputActions.IGestureDet
         }
     }
 
+    // CHECK FOR NEW GESTURES
     public void Update()
     {
         if (_fingersReady && _coLocationSynchronizer.GetIdOfPlayerToBePositioned() != 0)
@@ -53,6 +54,7 @@ public class GestureDetector : MonoBehaviour, XRIDefaultInputActions.IGestureDet
         }
     }
 
+    //ASYNCRO BONE INITIALIZATION
     private IEnumerator DelayInitBones()
     {
         while (!_skeleton.IsInitialized)
@@ -63,6 +65,7 @@ public class GestureDetector : MonoBehaviour, XRIDefaultInputActions.IGestureDet
         Debug.Log("Finger Bones have been initialized");
     }
 
+    //SAVE NEW GESTURE IN TABLE
     void Save()
     {
         Gesture g = new Gesture();
@@ -84,6 +87,7 @@ public class GestureDetector : MonoBehaviour, XRIDefaultInputActions.IGestureDet
             Save();
     }
 
+    // COMPARE TRACKED HAND FINGER BONES DISTANCE WITH PRE-SAVED FINGER BONES
     Gesture Recognize()
     {
         Gesture currentgesture = new Gesture();
