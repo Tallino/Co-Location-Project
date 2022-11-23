@@ -6,6 +6,7 @@ My advisor is Pierluca Lanzi.
 This software allows users to colocate in VR with Oculus Quest 1 or 2.
 
 How to use the software:
+
 If you are client ->
 
 Press Grip, Trigger and A button on your right controller to candidate for colocation.
